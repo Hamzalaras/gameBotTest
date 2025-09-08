@@ -1,0 +1,132 @@
+{
+    "title": "الغابة الملعونة",
+    "sequences":[
+        {
+            "photo": "",
+            "position": 0 ,
+            "racontreur": [
+                {
+                    "الراوي": "هذه تجربة"
+                }
+            ],
+            "subHistory" : [
+                {
+                    "button": "التالي",
+                    "buttonStyle": 1,
+                    "followUp": false
+                }
+            ]
+        },
+        {
+            "photo": "first.jpg",
+            "position": 1,
+            "racontreur": [
+                {
+                    "الراوي": "2هذه تجربة"
+                }
+            ],
+            "subHistory" : [
+                {
+                    "button": "يسار",
+                    "buttonStyle": 1,
+                    "followUp": false
+                },
+                {
+                    "button": "يمين",
+                    "buttonStyle": 1,
+                    "followUp": false
+                }
+            ]
+        },
+        {
+            "photo": "second.jpg",
+            "position": 2,
+            "racontreur": [
+                {
+                    "الراوي": "3هذه تجربة"
+                }
+            ],
+            "subHistory" : [
+                {
+                    "button": "ياخو",
+                    "buttonStyle": 1,
+                    "followUp": false
+                },
+                {
+                    "button": "يا الشباب",
+                    "buttonStyle": 1,
+                    "followUp": true,
+                    "consequence": 0
+                }
+            ]
+        },
+        {
+            "photo": "../data/story/images/first.jpg",
+            "position": 3,
+            "racontreur": [
+                {
+                    "الراوي": "4هذه تجربة"
+                }
+            ],
+            "subHistory" : [
+                {
+                    "button": "بدأ حوار",
+                    "buttonStyle": 1,
+                    "followUp": false
+                },
+                {
+                    "button": "الهرب",
+                    "followUp": true,
+                    "buttonStyle": 1,
+                    "consequence": [
+                            {
+                            "elRawi": "نتائج2",
+                            "photo": "../data/story/images/second.jpg",
+                            "buttons": "عودة"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "photo": "../data/story/images/second.jpg",
+            "position": 4,
+            "racontreur": [
+                {
+                    "helper": "hello"
+                }
+            ],
+            "subHistory" : [
+                {
+                    "button": "غابة ملعونة؟",
+                    "buttonStyle": 1,
+                    "followUp": false
+                },
+                {
+                    "button": "من انت؟",
+                    "buttonStyle": 1,
+                    "followUp": true,
+                    "consequence": [
+                            {
+                            "elRawi": "نتائج2",
+                            "photo": "../data/story/images/first.jpg",
+                            "buttons": "عودة"
+                        }
+                    ]
+                },
+                {
+                    "button": "لقد احرجتني",
+                    "buttonStyle": 1,
+                    "followUp": true,
+                    "consequence": [
+                            {
+                            "elRawi": "نتائج2",
+                            "photo": "../data/story/images/first.jpg",
+                            "buttons": "عودة"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,57 @@
+[
+    {
+        "commandsName": "playCommands",
+        "arabicName" : "أوامر اللعب",
+        "commands":[
+            {
+                "for": "لغير المسجل فقط:",
+                "data": [
+                    {
+                        "commandName": "رحمة",
+                        "help": "later"
+                    }
+                ]
+            },
+            {
+                "for": "اللاعب فقط:",
+                "data": [
+
+                ]
+            },
+            {
+                "for": "كل من المسجل وغير المسجل:",
+                "data":[
+                    {
+                        "commandName": "أوامر",
+                        "help": "later"
+                    }
+                ]
+            }
+        ]
+    }
+    ,{
+        "commandsName": "adminCommands",
+        "arabicName" : "أوامر الأدمن",
+        "commands":[
+            {
+                "for": "أدمن فقط",
+                "data": [
+                    {
+                        "commandName": "تحديد_روم",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "حذف_روم",
+                        "help": "later"
+                    }
+
+                ]
+            }
+        ]
+    },
+    {
+        "commandsName": "ownersCommands",
+        "arabicName" : "أوامر صناع البوت",
+        "commands":[]
+    }
+]
