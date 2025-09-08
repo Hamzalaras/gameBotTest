@@ -1,24 +1,24 @@
 [
     {
-        "value": "comman",
+        "value": "عامة",
         "cards": [
             {
-                "name": "wo",
+                "name": "حمزة",
                 "photo": "first.jpg",
                 "id": 1
             },
             {
-                "name": "wi",
+                "name": "بسبس",
                 "photo": "",
                 "id": 2
             },
             {
-                "name": "bb",
+                "name": "نن",
                 "photo": "",
                 "id": 3
             },
             {
-                "name": "tt",
+                "name": "ثث",
                 "photo": "",
                 "id": 4
             }

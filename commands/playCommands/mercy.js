@@ -10,9 +10,9 @@ module.exports = {
             const serverAvatar = await msg.guild.iconURL({ dynamic: true, size: 2048});
             const rahmaEmbed = new EmbedBuilder()
                                 .setTitle('بوت لعبة الرحمة الكونية')
-                                .setDescription(`-مرحبا بك يا من يبتغي الرحمة الكونية🌌: "${msg.author.username}". \n -استعد لأغرب تجربة تمر عليك؛ فالرحمة ليست مرحلة بل هي أسلوب حياة و عيش!!✨ \n -اختر أحد الشخصيات اسفله لتمثلك في باقي مغامرتك🎭`)
+                                .setDescription(`\*\*--مرحبا بك يا من يبتغي الرحمة الكونية🌌: "${msg.author.username}". \n --استعد لأغرب تجربة تمر عليك؛ فالرحمة ليست مرحلة بل هي أسلوب حياة و عيش!!✨ \n --اختر أحد الشخصيات اسفله لتمثلك في باقي مغامرتك🎭\*\*`)
                                 .addFields(
-                                    {name: `هام`, value: `~ يرجى قرائة قوانين البوت قبل بدأ اللعب بطباعة الأمر: "أوامر"~`}
+                                    {name: `هام:`, value: `\*\*~يرجى قراءة قوانين البوت قبل البدأ باللعب~\*\*`}
                                 )
                                 .setThumbnail(serverAvatar);
             const characterSelect = new StringSelectMenuBuilder()
@@ -63,7 +63,7 @@ module.exports = {
                     }
 
                     let targetCharacterCards = ''; 
-                    targetCharacter.characterCards.forEach(card => targetCharacterCards = targetCharacterCards + `- بطاقة: ~~${card.name}~~ لها: ${card.stages.length} مستويات.\n`);
+                    targetCharacter.characterCards.forEach(card => targetCharacterCards = targetCharacterCards + `- بطاقة: \*\*~~${card.name}~~\*\* لها: \*\*${card.stages.length}\*\* مستويات.\n`);
                     const charecterEmbed = new EmbedBuilder()
                                             .setTitle(`${targetCharacter.name}`)
                                             .setDescription(`${targetCharacter.description}`)

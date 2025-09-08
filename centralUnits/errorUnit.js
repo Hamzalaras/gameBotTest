@@ -50,7 +50,7 @@ async function deleteError(obj, msg){
         obj.delete().catch(async err => {
             await ErrorUnit.throwError(err, msg, 'حدث خطأ أثناء محاو');
         })
-    })
+    }, 5_000)
 }
 
-module.exports = { DatabaseError, FetchingError, CollectorError,ScarpingError, ErrorUnit };
+module.exports = { DatabaseError, FetchingError, CollectorError, ErrorUnit };
