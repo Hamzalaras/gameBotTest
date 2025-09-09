@@ -58,7 +58,7 @@ module.exports = {
                     interaction.deferUpdate();
                     const targetCharacter = characters.find(character => character.name === interaction.values[0]);  
                     if(!targetCharacter){ 
-                        await msg.channel.send({content: `يبدو أن هذه الشخصية قد تم حذفها دون تحديث البايانات! 🥲\n نعتذر على الخطأ الفادح سيتم اصلاح المشكل بأقرب وقت ❤️`});
+                        await ErrorUnit.throwError(false, msg, `يبدو أن هذه الشخصية قد تم حذفها دون تحديث البايانات! 🥲\n نعتذر على الخطأ الفادح سيتم اصلاح المشكل بأقرب وقت ❤️`);
                         return;
                     }
 

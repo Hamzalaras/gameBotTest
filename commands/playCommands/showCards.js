@@ -17,7 +17,7 @@ module.exports = {
             }
 
             if(!targetCard){
-                await msg.channel.send({content: `${msg.author} \n لم يتم ايجاد هذه البطاقة: ${wanted} 🥲`});
+                await ErrorUnit.throwError(false, msg, `${msg.author} \n لم يتم ايجاد هذه البطاقة: ${wanted} 🥲`)
                 return
             }  
 

@@ -1,4 +1,4 @@
-const { interOrMsg } = require('./usefullFuncs.js');
+const { Message, BaseInteraction } = require('discord.js');
 
 class BotError extends Error{
     constructor(message){
@@ -17,20 +17,29 @@ class ErrorUnit{
     static async throwError(err, msg, errMsg = `يبدو أن هناك خطأ ما`){
         let response = '';
         try {
-            switch (err.name){
-                case 'DatabaseError':
-                    response = 'حدث خطأ اثناء الإتصال بقاعدة البيانات ';
-                    break;
-                case 'FetchingError':
-                    response = 'حدث خطأ اثناء الإتصال ب: API';
-                    break;
-                case 'CollectorError':
-                    response = 'حدث خطأ اثناء تصفح البيانات ';
-                    break;  
-                default:
-                    response = errMsg;            
+            if(err){
+                switch (err.name){
+                    case 'DatabaseError':
+                        response = 'حدث خطأ اثناء الإتصال بقاعدة البيانات ';
+                        break;
+                    case 'FetchingError':
+                        response = 'حدث خطأ اثناء الإتصال ب: API';
+                        break;
+                    case 'CollectorError':
+                        response = 'حدث خطأ اثناء تصفح البيانات ';
+                        break;  
+                    default:
+                        response = errMsg;            
+                }
+            }else{
+                response = errMsg;
             }
-            const responseObj = await interOrMsg(msg, response);
+            let responseObj = null;
+            if(msg instanceof Message){
+                responseObj =  await msg.reply(`${msg.author}\n${response} 🥲`);
+            }else if(msg instanceof BaseInteraction){
+                responseObj = await msg.editReply(`${msg.user}\n${response} 🥲`);
+            }            
             await deleteError(responseObj, msg);
             return;
 
@@ -43,9 +52,9 @@ class ErrorUnit{
 async function deleteError(obj, msg){
     setTimeout(()=>{
         obj.delete().catch(async err => {
-            await ErrorUnit.throwError(err, msg, 'حدث خطأ أثناء محاو');
+            await ErrorUnit.throwError(err, msg, 'حدث خطأ أثناء محاولة حذف رسالة الخطأ');
         })
-    }, 5_000)
+    }, 4_000)
 }
 
 module.exports = { DatabaseError, FetchingError, CollectorError, ErrorUnit };

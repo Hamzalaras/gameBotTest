@@ -19,7 +19,7 @@ module.exports = {
             const targetChannel = await interaction.options.getChannel('الروم');
             const guild = interaction.guild;
             if(!guild){
-                interaction.editReply(`هذا الأمر صالح في السيرفر فقط!!`);
+                await ErrorUnit.throwError(false, interaction, `هذا الأمر صالح في السيرفر فقط!!`)
                 return;
             };
             const channelManager = new ChannelManager(interaction);
@@ -27,6 +27,7 @@ module.exports = {
             return ;
         } catch (error) {
             await ErrorUnit.throwError(error, interaction, 'حدث خطأ أثناء حذف الروم');
+            return;
         }
     }          
 }
