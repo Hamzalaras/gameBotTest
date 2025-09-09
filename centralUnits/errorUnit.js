@@ -1,3 +1,5 @@
+const { interOrMsg } = require('./usefullFuncs.js');
+
 class BotError extends Error{
     constructor(message){
         super(message);
@@ -24,19 +26,12 @@ class ErrorUnit{
                     break;
                 case 'CollectorError':
                     response = 'حدث خطأ اثناء تصفح البيانات ';
-                    break;
+                    break;  
                 default:
                     response = errMsg;            
             }
-            let responseObj = null;
-            if("content" in msg && "author" in msg){
-                responseObj =  await msg.reply(`${msg.author}\n${response} 🥲`);
-                console.error(err);
-                await deleteError(responseObj);
-                return;
-            }
-            responseObj = await msg.editReply(`${msg.user}\n${response} 🥲`);
-            await deleteError(responseObj);
+            const responseObj = await interOrMsg(msg, response);
+            await deleteError(responseObj, msg);
             return;
 
         } catch (error) {
