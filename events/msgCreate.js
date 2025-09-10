@@ -18,7 +18,7 @@ module.exports = {
             if(!targetCommand) return;
             const exist = (await Management.selectManager(['player_id'], 'players', 'player_id', msg.author.id)).length > 0 ;
             if(!(exist === targetCommand.need) && targetCommand.need !== 'undefined' ){
-                await ErrorUnit.throwError(false, msg, 'لا يمكنك تنفيذ هذا الأمر!! ');
+                await ErrorUnit.throwError(false, msg, `لا يمكنك تنفيذ هذا الأمر: \`${args[0]}\`` );
                 return;
             }
 
