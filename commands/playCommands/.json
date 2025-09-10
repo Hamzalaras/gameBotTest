@@ -13,7 +13,14 @@
         {
             "for": "اللاعب فقط:",
             "data": [
-
+                {
+                    "commandName": "بطاقاتي",
+                    "help": "later"
+                },
+                {
+                    "commandName": "عرض",
+                    "help": "later"
+                }
             ]
         },
         {
@@ -21,6 +28,10 @@
             "data":[
                 {
                     "commandName": "أوامر",
+                    "help": "later"
+                },
+                {
+                    "commandName": "مساعدة",
                     "help": "later"
                 }
             ]

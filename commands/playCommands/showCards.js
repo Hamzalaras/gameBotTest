@@ -4,6 +4,7 @@ const path = require('path');
 
 module.exports = {
     name:['عرض'],
+    path: { 'playCommands': [2, 1] },
     async execute(msg){
         try {
             const wanted = msg.content.trim().split(/\s+/)[1];

@@ -5,6 +5,7 @@ const cards = require('../../data/cards/cards.json');
 
 module.exports = {
     name: ['بطاقاتي'],
+    path: { 'playCommands': [1, 0] },
     async execute(msg){
         try {
 

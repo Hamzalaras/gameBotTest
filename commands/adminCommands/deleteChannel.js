@@ -12,7 +12,8 @@ module.exports = {
                       .setRequired(true)
                       .addChannelTypes(ChannelType.GuildText)
               ),
-    on: true,         
+    on: true,
+    path: { 'adminCommands': [0, 1] },             
      async execute(interaction){
         try {            
             await interaction.deferReply({ ephemeral: true });

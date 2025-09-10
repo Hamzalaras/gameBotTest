@@ -1,0 +1,19 @@
+{
+    "arabicName" : "أوامر الأدمن",
+    "commands":[
+        {
+            "for": "أدمن فقط",
+            "data": [
+                {
+                    "commandName": "تحديد_روم",
+                    "help": "later"
+                },
+                {
+                    "commandName": "حذف_روم",
+                    "help": "later"
+                }
+
+            ]
+        }
+    ]
+}

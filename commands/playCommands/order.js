@@ -4,6 +4,7 @@ const path = require('path');
 
 module.exports = {
     name: ['أوامر', 'اوامر', 'الأوامر', 'الاوامر'],
+    path: { 'playCommands': [2, 0] },
     async execute(msg){
         try {
 

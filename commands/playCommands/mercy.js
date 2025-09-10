@@ -5,6 +5,7 @@ const { Management } = require('../../dataBase.js');
 
 module.exports = {
     name: ["رحمة", "الرحمة", "رحمه", "الرحمه"],
+    path: { 'playCommands': [0, 0]},
     async execute(msg){
         try {
             const serverAvatar = await msg.guild.iconURL({ dynamic: true, size: 2048});
