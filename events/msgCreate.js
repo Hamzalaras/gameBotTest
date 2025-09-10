@@ -16,7 +16,12 @@ module.exports = {
             const targetCommand = commandsNames.map(name => msg.client.commands.get(name))
                                                .find(command => command.name && command.name.includes(args[0]));
             if(!targetCommand) return;
-            
+            const exist = (await Management.selectManager(['player_id'], 'players', 'player_id', msg.author.id)).length > 0 ;
+            if(!(exist === targetCommand.need) && targetCommand.need !== 'undefined' ){
+                await ErrorUnit.throwError(false, msg, 'لا يمكنك تنفيذ هذا الأمر!! ');
+                return;
+            }
+
             await targetCommand.execute(msg, args);
             return;
         } catch (error) {
