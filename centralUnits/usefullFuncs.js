@@ -1,3 +1,4 @@
+const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 const { StoryError, ErrorUnit } = require('./errorUnit.js');
 const path = require('path');
 const story = require('../data/story/firstPort/firstPort.json');
@@ -7,10 +8,17 @@ function random(array){
     return array[Math.floor(Math.random() * array.length)];
 }
 
+const quiteBTN = new ButtonBuilder()
+                     .setCustomId('تعطيل')
+                     .setLabel('تعطيل')
+                     .setStyle(ButtonStyle.Secondary);
+
 async function gameHandling(Management, msg, confirmationMsg, filter, advanture = false){
+
+    //if(!advanture) {}
+    const position = (await Management.selectManager(['story_position'], 'players', 'player_id', msg.author.id))[0].story_position;
+
     try {
-        //if(!advanture) {}
-        const position = (await Management.selectManager(['lvl'], 'players', 'player_id', msg.author.id))[0].lvl;
         
         let currentFrame = 0;
         let wichSubHistory = false;
@@ -36,23 +44,32 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
                             }).join('\n');    
                             
             const buttons = subHistory.map(obj => {
-                return new ButtonBuilder()
+                return  new ButtonBuilder()
                         .setCustomId(`${obj.button}`)
                         .setLabel(`${obj.button}`)
                         .setStyle(obj.buttonStyle)
-                        
             });
-            const row = new ActionRowBuilder().addComponents(buttons);
+            const row = new ActionRowBuilder().addComponents(buttons, quiteBTN);
 
             await confirmationMsg.edit({content: `${content}`, files: photo, components: [row]});
             const collector = await confirmationMsg.awaitMessageComponent({ filter, time: 30_000 });
+            if(collector.customId === 'تعطيل'){
+                await collector.deferUpdate();
+                await Management.insertManager(['story_position'], 'players', [position]);
+                await confirmationMsg.edit({content: `${msg.author}\nتم حفظ تقدمك بنجاح 😘`});
+                return;
+            }
             await collector.deferUpdate();
-            wichsub =  data.subHistory.find(obj => obj.button === collector.customId);
+            wichSubHistory =  data.subHistory.find(obj => obj.button === collector.customId);
+            if(!wichSubHistory){
+                await new ErrorUnit.throwError(false, msg, 'حدث خطأ أثناء البحث عن الصفحة التالية 🥲\n يرجى المحاولة لاحقا 😘');
+                return;
+            }
 
-            if(!wichsub.followUp){ 
-                departPosition++;
+            if(!wichSubHistory.followUp){ 
+                position++;
                 con = false;
-            }else if(wichsub.followUp && wichsub.consequence){
+            }else if(wichSubHistory.followUp && wichSubHistory.consequence){
                 if(con) currentFrame++;
                 con = true;
             }
@@ -62,7 +79,7 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
 
         if (error.code === 'InteractionCollectorError' || error.message.includes('time')){
             try {
-                await Management.insertManager(['lvl'], 'players', msg.author.id);
+                await Management.insertManager(['story_position'], 'players', [position]);
                 await confirmationMsg.edit({content: `${msg.author}\nلقد إنتهى الوقت المحدد ❌\nلقد تم حفظ تقدمكم بنجاح 😘`});
                 return;
             } catch (error) {
@@ -70,7 +87,7 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
                 return;
             }
         } else {
-            throw new StoryError(error.messsage);
+            throw new error;
         }
 
     }
