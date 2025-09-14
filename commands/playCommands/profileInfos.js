@@ -13,7 +13,7 @@ module.exports = {
 
         const getbasicInfo = await Management.selectManager(['player_name', 'lvl', 'story_position'], 'players', 'player_id', id) ;
         const getcharacterInfo = await Management.selectManager(['character_name', 'attaque', 'deffanse', 'magic', 'physic'], 'players_characters', 'player_id', id);
-        const getwelthInfo = await dataBaseManager.getInfo('gold', 'diamands', 'coins', 'players_welth', id);
+        const getwelthInfo = await Management.selectManager(['gold', 'diamands', 'coins'], 'players_welth', id) ;//dataBaseManager.getInfo('gold', 'diamands', 'coins', 'players_welth', id);
         const [basicInfo, characterInfo, welthInfo] = [getbasicInfo[0], getcharacterInfo[0], getwelthInfo[0]];
         const characterData = characters.find(c => c.name == characterInfo.character_name);
 
