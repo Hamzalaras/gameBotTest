@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
     name:['عرض'],
-    path: { 'playCommands': [2, 1] },
+    path: { 'playCommands': [1, 1] },
     need: true,
     async execute(msg){
         try {

@@ -5,6 +5,8 @@ const { gameHandling } = require('../../centralUnits/usefullFuncs.js');
 
 module.exports ={
     name: ['تفعيل_قصة', 'تفعيل_قصه'],
+    path: { 'playCommands': [1, 2] },
+    need: true,
     async execute(msg){
 
         const faceEmbed = new EmbedBuilder()

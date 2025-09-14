@@ -20,6 +20,14 @@
                 {
                     "commandName": "عرض",
                     "help": "later"
+                },
+                {
+                    "commandName": "تفعيل_قصة",
+                    "help": "later"
+                },
+                {
+                    "commandName": "ملفي",
+                    "help": "later"
                 }
             ]
         },
