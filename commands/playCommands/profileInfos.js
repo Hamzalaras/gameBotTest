@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
+const { ErrorUnit } = require('../../centralUnits/errorUnit.js');
 const { Management } = require('../../dataBase.js');
 const characters = require('../../data/character/character.json');
 
@@ -7,27 +8,39 @@ module.exports = {
     path: { 'playCommands': [1, 3] },
     need: true,
     async execute(msg){
-        const id = msg.author.id
-        const serverAvatar = await msg.guild.iconURL({ dynamic: true, size: 2048});
+        try {
+            const id = msg.author.id
+            const serverAvatar = await msg.guild.iconURL({ dynamic: true, size: 2048});
 
+            const [basicInfo, characterInfo, welthInfo] = [
+                (await Management.selectManager(['player_name', 'lvl', 'story_position'], 'players', 'player_id', id))[0],
+                (await Management.selectManager(['character_name', 'attaque', 'deffanse', 'magic', 'physic'], 'players_characters', 'player_id', id))[0],
+                (await Management.selectManager(['gold', 'diamands', 'coins'], 'players_welth', 'player_id', id))[0]
+            ]
+                    
+            const characterData = characters.find(c => c.name == characterInfo.character_name);
+            console.log(characterData.initialMagic);
+            const profileEmbed = new EmbedBuilder()
+                                    .setTitle(`ملف خاص ب: ${basicInfo.player_name}`)
+                                    .setColor('Green')
+                                    .setThumbnail(serverAvatar)
+                                    .addFields(
+                                        { name: `ثروة اللاعب:`, 
+                                            value: `الذهب: \*\*${welthInfo.gold}\*\*\nالجواهر: \*\*${welthInfo.diamands}\*\*\nالعملات: \*\*${welthInfo.coins}\*\*`},
+                                        { name: `مستوى الشهوة:`, 
+                                            value: `\*\*${basicInfo.lvl}\*\*`},
+                                        { name: `خصائص شخصية اللاعب:`,
+                                            value: `\nاسم الشخصية: \*\*${characterData.name}\*\*\nنقاط الهجوم: \*\*${characterData.initialAttack}\*\* + \*\*${characterInfo.attaque}\*\*\nنقاط الدفاع: \*\*${characterData.initialDefense}\*\* + \*\*${characterInfo.deffanse}\*\*\nنقاط السحر: \*\*${characterData.initialMagic}\*\* + \*\*${characterInfo.magic}\*\*\nنقاط الجسم: \*\*${characterData.initialPhysic}\*\* + \*\*${characterInfo.physic}\*\*\n`},
+                                        { name: `وضع القصة:`, 
+                                            value: `\*\*${basicInfo.story_position}\*\*`
+                                        }
+                                    )
 
-        const getbasicInfo = await Management.selectManager(['player_name', 'lvl', 'story_position'], 'players', 'player_id', id) ;
-        const getcharacterInfo = await Management.selectManager(['character_name', 'attaque', 'deffanse', 'magic', 'physic'], 'players_characters', 'player_id', id);
-        const getwelthInfo = await Management.selectManager(['gold', 'diamands', 'coins'], 'players_welth', id) ;//dataBaseManager.getInfo('gold', 'diamands', 'coins', 'players_welth', id);
-        const [basicInfo, characterInfo, welthInfo] = [getbasicInfo[0], getcharacterInfo[0], getwelthInfo[0]];
-        const characterData = characters.find(c => c.name == characterInfo.character_name);
-
-        const profileEmbed = new EmbedBuilder()
-                                 .setTitle(`ملف خاص ب: ${basicInfo.player_name}`)
-                                 .setColor('Green')
-                                 .setThumbnail(serverAvatar)
-                                 .addFields(
-                                    { name: `ثروة اللاعب: \n الذهب: ${welthInfo.gold} \n الجواهر: ${welthInfo.diamands} \n العملات: ${welthInfo.coins}`, value:``},
-                                    { name: `مستوى الشهوة: ${basicInfo.lvl}`, value:``},
-                                    { name: `خصائص شخصية اللاعب: \n اسم الشخصية: ${characterData.name} \n نقاط الهجوم: ${characterData.initialAttack} + ${characterInfo.attaque} \n نقاط الدفاع: ${characterData.initialAttack} + ${characterInfo.attaque} \n نقاط السحر: ${characterData.initialAttack} + ${characterInfo.attaque} \n نقاط الجسم: ${characterData.initialAttack} + ${characterInfo.attaque} \n`, value:``},
-                                    { name: `الوضع الحالي: ${basicInfo.current_mode}.`, value:``}
-                                 )
-
-        return await msg.channel.send({content: `${msg.author}`, embeds: [profileEmbed]});                         
+            await msg.channel.send({content: `${msg.author}`, embeds: [profileEmbed]});
+            return;
+        } catch (error) {
+            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر \`ملفي\`');
+            return;
+        }                  
     }
 }
