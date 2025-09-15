@@ -1,5 +1,5 @@
 const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
-const { StoryError, ErrorUnit } = require('./errorUnit.js');
+const { ErrorUnit } = require('./errorUnit.js');
 const path = require('path');
 const story = require('../data/story/firstPort/firstPort.json');
 const consequences = require('../data/story/firstPort/consequences.json');
@@ -8,15 +8,15 @@ function random(array){
     return array[Math.floor(Math.random() * array.length)];
 }
 
-const quiteBTN = new ButtonBuilder()
+const quiteBTN = [new ButtonBuilder()
                      .setCustomId('تعطيل')
                      .setLabel('تعطيل')
-                     .setStyle(ButtonStyle.Secondary);
+                     .setStyle(ButtonStyle.Secondary)];
 
 async function gameHandling(Management, msg, confirmationMsg, filter, advanture = false){
 
     //if(!advanture) {}
-    const position = (await Management.selectManager(['story_position'], 'players', 'player_id', msg.author.id))[0].story_position;
+    let position = (await Management.selectManager(['story_position'], 'players', 'player_id', msg.author.id))[0].story_position;
 
     try {
         
@@ -37,20 +37,20 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
             const photo = data.photo ? 
                           [path.join(__dirname, '..', 'data', 'story', 'firstPort', 'images', data.photo)] :
                           [] ;
-
             const content = `${msg.author} \n` + data.racontreur.map(obj =>{
                                 const raconteur = Object.keys(obj)[0];
                                 return `${raconteur}: ${obj[raconteur]}`
                             }).join('\n');    
                             
-            const buttons = subHistory.map(obj => {
+            const buttons = data.subHistory.map(obj => {
                 return  new ButtonBuilder()
                         .setCustomId(`${obj.button}`)
                         .setLabel(`${obj.button}`)
                         .setStyle(obj.buttonStyle)
-            });
-            const row = new ActionRowBuilder().addComponents(buttons, quiteBTN);
+            }).concat(quiteBTN);
+            const row = new ActionRowBuilder().addComponents(buttons);
 
+            await confirmationMsg.edit({embeds: []});
             await confirmationMsg.edit({content: `${content}`, files: photo, components: [row]});
             const collector = await confirmationMsg.awaitMessageComponent({ filter, time: 30_000 });
             if(collector.customId === 'تعطيل'){
@@ -83,11 +83,11 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
                 await confirmationMsg.edit({content: `${msg.author}\nلقد إنتهى الوقت المحدد ❌\nلقد تم حفظ تقدمكم بنجاح 😘`});
                 return;
             } catch (error) {
-                await ErrorUnit(false, msg, 'حدث خطأ أثناء محاولة حفظ تقدمكم!!\nسيتم اصلاح الخطأ في أقرب وقت');
+                await ErrorUnit.throwError(false, msg, 'حدث خطأ أثناء محاولة حفظ تقدمكم!!\nسيتم اصلاح الخطأ في أقرب وقت');
                 return;
             }
         } else {
-            throw new error;
+            throw error;
         }
 
     }

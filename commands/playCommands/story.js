@@ -12,17 +12,17 @@ module.exports ={
         const faceEmbed = new EmbedBuilder()
                               .setTitle('تفعيل_قصة')
                               .setColor('Red')
-                              .addField(
+                              .addFields(
                                 { name: 'هام:', value: '\*\*يرجى قراءة شرح هذا الأمر عن طريق طباعة الأمر: \`مساعدة\` \`تفعيل_قصة\`\*\*'}
-                              )
+                              );
         const confirmationBTN = new ButtonBuilder()
                                     .setCustomId('confirmation')
                                     .setStyle(ButtonStyle.Danger)
-                                    .setLabel('تأكيد')
+                                    .setLabel('تأكيد');
         const rejectBTN = new ButtonBuilder()
                               .setCustomId('reject')
                               .setStyle(ButtonStyle.Primary)
-                              .setLabel('رفض')
+                              .setLabel('رفض');
         const buttonsRow = new ActionRowBuilder().addComponents(confirmationBTN, rejectBTN);
 
         try {

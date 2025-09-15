@@ -25,7 +25,8 @@ module.exports = {
             await targetCommand.execute(msg, args);
             return;
         } catch (error) {
-            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء توجيه الأمر')
+            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء توجيه الأمر');
+            return
         }
     }
 }

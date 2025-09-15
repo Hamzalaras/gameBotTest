@@ -40,13 +40,22 @@ class Management{
             const columnsClause = columns.map(col => `${col}= ?`).join('AND');
             const query = `DELETE FROM ${table} WHERE ${columnsClause}`;
             const [row] = await dataBase.query(query, value);
-            console.log(row);
             return;
         } catch (error) {
             throw new DatabaseError(error.message);
         }
     }
 
+    static async updateManager(columns, table, values, where, whereVal){
+        try {
+            const columnsClause = columns.map(col => `${col} = ?`).join(', ');
+            const query = `UPDATE ${table} SET ${columnsClause} WHERE ${where} = ?`;
+            const [row] = await dataBase.query(query, [...values, whereVal]);
+            return
+        } catch (error) {
+            throw new DatabaseError(error.message);
+        }
+    }
 }
 
 module.exports = { Management };

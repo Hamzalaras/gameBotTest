@@ -43,7 +43,8 @@ class ErrorUnit{
                 responseObj =  await msg.reply(`${msg.author}\n${response} 🥲`);
             }else if(msg instanceof BaseInteraction){
                 responseObj = await msg.editReply(`${msg.user}\n${response} 🥲`);
-            }            
+            }      
+            console.error(err);      
             await deleteError(responseObj, msg);
             return;
 

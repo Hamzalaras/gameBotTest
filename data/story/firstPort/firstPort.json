@@ -61,7 +61,7 @@
             ]
         },
         {
-            "photo": "../data/story/images/first.jpg",
+            "photo": "first.jpg",
             "position": 3,
             "racontreur": [
                 {
@@ -81,7 +81,7 @@
                     "consequence": [
                             {
                             "elRawi": "نتائج2",
-                            "photo": "../data/story/images/second.jpg",
+                            "photo": "second.jpg",
                             "buttons": "عودة"
                         }
                     ]
@@ -89,7 +89,7 @@
             ]
         },
         {
-            "photo": "../data/story/images/second.jpg",
+            "photo": "second.jpg",
             "position": 4,
             "racontreur": [
                 {
@@ -109,7 +109,7 @@
                     "consequence": [
                             {
                             "elRawi": "نتائج2",
-                            "photo": "../data/story/images/first.jpg",
+                            "photo": "first.jpg",
                             "buttons": "عودة"
                         }
                     ]
@@ -121,7 +121,7 @@
                     "consequence": [
                             {
                             "elRawi": "نتائج2",
-                            "photo": "../data/story/images/first.jpg",
+                            "photo": "first.jpg",
                             "buttons": "عودة"
                         }
                     ]
