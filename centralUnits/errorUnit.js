@@ -12,7 +12,7 @@ class BotError extends Error{
 class DatabaseError extends BotError{};
 class FetchingError extends BotError{};
 class CollectorError extends BotError{};
-class StoryError extends BotError{};
+class FalseInput extends BotError{};
 
 class ErrorUnit{
     static async throwError(err, msg, errMsg = `يبدو أن هناك خطأ ما`){
@@ -31,7 +31,10 @@ class ErrorUnit{
                         break;  
                     case 'StoryError':
                         response = 'حدث خطأ اثناء عرض القصة ';
-                        break;      
+                        break; 
+                    case 'FalseInput':
+                        response = `يرجى استخدام الأمر بالشكل الصحيح!!\nإطبع الأمر \`مساعدة\` \`${err.message}\` للشرح.`;
+                        break;       
                     default:
                         response = errMsg;            
                 }
@@ -62,4 +65,4 @@ async function deleteError(obj, msg){
     }, 4_000)
 }
 
-module.exports = { DatabaseError, FetchingError, CollectorError, StoryError, ErrorUnit };
+module.exports = { DatabaseError, FetchingError, CollectorError, FalseInput, ErrorUnit };
