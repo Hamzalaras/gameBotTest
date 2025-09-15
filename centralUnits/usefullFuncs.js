@@ -55,7 +55,7 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
             const collector = await confirmationMsg.awaitMessageComponent({ filter, time: 30_000 });
             if(collector.customId === 'تعطيل'){
                 await collector.deferUpdate();
-                await Management.insertManager(['story_position'], 'players', [position]);
+                await Management.updateManager(['story_position'], 'players', [position], 'player_id', msg.author.id);
                 await confirmationMsg.edit({content: `${msg.author}\nتم حفظ تقدمك بنجاح 😘`});
                 return;
             }
