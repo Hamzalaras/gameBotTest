@@ -5,8 +5,6 @@ class BotError extends Error{
         super(message);
         this.name = this.constructor.name;
     }
-
-
 }
 
 class DatabaseError extends BotError{};
