@@ -93,30 +93,4 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
     }
 } 
 
-function modalCreate(title, filedsInfo){
-    try {
-        const modal = new ModalBuilder()
-                          .setTitle(`تغيير تشكيلة ال${title}`)
-                          .setCustomId('modal')
-        const rows = [];
-        for(let i = 0; i < filedsInfo.length; i++){
-            const filedInfo = filedsInfo[i];
-            const filed = new TextInputBuilder()
-                              .setCustomId(filedInfo.customId)
-                              .setLabel(filedInfo.label)
-                              .setStyle(filedInfo.style)
-                              .setPlaceholder(filedInfo.placeholder)
-                              .setRequired(true);
-
-            rows.push(new ActionRowBuilder().addComponents(filed));
-        };
-
-        return (modal.addComponents(rows));      
-
-    } catch (error) {
-        throw new Error(error.message);
-    }
-}
-
-
 module.exports = { random, gameHandling };
