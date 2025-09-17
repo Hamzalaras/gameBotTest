@@ -28,6 +28,14 @@
                 {
                     "commandName": "ملفي",
                     "help": "later"
+                },
+                {
+                    "commandName": "تشكيلة",
+                    "help": "later"
+                },
+                {
+                    "commandName": "تغيير",
+                    "help": "later"
                 }
             ]
         },

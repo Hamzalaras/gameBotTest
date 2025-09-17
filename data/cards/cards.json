@@ -5,22 +5,22 @@
             {
                 "name": "حمزة",
                 "photo": "first.jpg",
-                "id": 1
+                "id": "1"
             },
             {
                 "name": "بسبس",
                 "photo": "",
-                "id": 2
+                "id": "2"
             },
             {
                 "name": "نن",
                 "photo": "",
-                "id": 3
+                "id": "3"
             },
             {
                 "name": "ثث",
                 "photo": "",
-                "id": 4
+                "id": "4"
             }
         ]
     }
