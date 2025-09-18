@@ -38,21 +38,17 @@ module.exports = {
                                                 .setDescription('اضغط علي لعرض معلومات الشخصية')
                                                 .setValue('كمال كنجوة'),
                                         );
-                                                    
-            const chooseBTN = new ButtonBuilder()
-                                .setCustomId('chosen')
-                                .setLabel('إختيار')
-                                .setStyle(ButtonStyle.Primary);
-            const rulesBTN = new ButtonBuilder()
-                                .setLabel('القوانين')      
-                                .setCustomId('rules')
-                                .setStyle(ButtonStyle.Danger);
 
-            const btnRow = new ActionRowBuilder().addComponents(rulesBTN, chooseBTN);
+            const btns = [
+                new ButtonBuilder().setCustomId('chosen').setLabel('إختيار').setStyle(ButtonStyle.Primary),
+                new ButtonBuilder().setCustomId('rules').setLabel('القوانين').setStyle(ButtonStyle.Danger)
+            ];
+
+            const btnRow = new ActionRowBuilder().addComponents(btns);
             const characterSelectRow = new ActionRowBuilder().addComponents(characterSelect);
             const filter = i => i.user.id === msg.author.id ;
 
-            const rahmaResponse = await msg.channel.send({content: `${msg.author}`, embeds: [rahmaEmbed], components: [characterSelectRow],withResponse: true, filter});
+            const rahmaResponse = await msg.channel.send({content: `${msg.author}`, embeds: [rahmaEmbed], components: [characterSelectRow], filter});
             const collector = rahmaResponse.createMessageComponentCollector({ componentType: ComponentType.StringSelect, filter, time: 300_000});
 
             collector.on('collect', async interaction =>{
@@ -64,7 +60,7 @@ module.exports = {
                         return;
                     }
 
-                    let targetCharacterCards = ''; 
+                    let targetCharacterCards = '';
                     targetCharacter.characterCards.forEach(card => targetCharacterCards = targetCharacterCards + `- بطاقة: \*\*~~${card.name}~~\*\* لها: \*\*${card.stages.length}\*\* مستويات.\n`);
                     const charecterEmbed = new EmbedBuilder()
                                             .setTitle(`${targetCharacter.name}`)
@@ -97,6 +93,8 @@ module.exports = {
             
             collector.on('end', async ()=>{
                 try {
+                    btns.forEach(b => b.setDisabled(true));
+                    characterSelect.setDisabled(true);
                     await rahmaResponse.edit({content: `${msg.author}\nلقد إنتهى الوقت المحدد لهذه العملية!! 🥲`});
                     return;
                 } catch (error) {

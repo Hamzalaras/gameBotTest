@@ -16,7 +16,7 @@ module.exports = {
                 throw new FalseInput('تشكيلة');
             }
 
-            const userTeam = (await Management.selectManager(['first_card', 'second_card', 'third_card'], `players_team_${keyWord}`, 'player_id', 33))[0];
+            const userTeam = (await Management.selectManager(['first_card', 'second_card', 'third_card'], `players_team_${keyWord}`, 'player_id', msg.author.id))[0];
             if(!userTeam){
                 await ErrorUnit.throwError(false, msg, 'ليست لديك اي تشكيلة حاليا!!\nيرجى طباعة الأمر: \`later\`');
                 return;
@@ -32,19 +32,14 @@ module.exports = {
                                      .setTitle(`تشكيلة اللاعب: ${msg.author.globalName}`)
                                      .setDescription(`\*\*تشكيلة ال${keyWord}\*\*\n`)
                                      .addFields(
-                                        {
-                                          name: `اسم البطاقة:`,
-                                            value: `\*\*${firstCard.name}\*\*\n\n\*\*${secondCard.name}\*\*\n\n\*\*${thirdCard.name}\*\*`,
-                                            inline: true
+                                        { name: `البطاقة الأولى:`,
+                                            value: `\`\`${firstCard.name}\`\`. معرفها: \*\*${firstCard.id}\*\*`
                                         },
-                                        {
-                                          name: `معرف البطاقة:`,
-                                            value: `\*\*${firstCard.id}\*\*\n\n\*\*${secondCard.id}\*\*\n\n\*\*${thirdCard.id}\*\*`,
-                                            inline: true
+                                        { name: `البطاقة الثانية`,
+                                            value: `\`\`${secondCard.name}\`\` معرفها \*\*${secondCard.id}\*\*`
                                         },
-                                        { name: `رقم البطاقة:`,
-                                            value: `الأولى:\n\nالثانية:\n\nالثالة:`,
-                                            inline: true
+                                        { name: `البطاقة الثالثة`,
+                                            value: `\`\`${thirdCard.name}\`\` معرفها \*\*${thirdCard.id}\*\*`
                                         }
                                      )
              

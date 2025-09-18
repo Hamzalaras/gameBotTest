@@ -17,7 +17,7 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
 
     //if(!advanture) {}
     let position = (await Management.selectManager(['story_position'], 'players', 'player_id', msg.author.id))[0].story_position;
-
+    let buttons = [];
     try {
         
         let currentFrame = 0;
@@ -42,7 +42,7 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
                                 return `${raconteur}: ${obj[raconteur]}`
                             }).join('\n');    
                             
-            const buttons = data.subHistory.map(obj => {
+            buttons = data.subHistory.map(obj => {
                 return  new ButtonBuilder()
                         .setCustomId(`${obj.button}`)
                         .setLabel(`${obj.button}`)
@@ -80,6 +80,7 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
         if (error.code === 'InteractionCollectorError' || error.message.includes('time')){
             try {
                 await Management.insertManager(['story_position'], 'players', [position]);
+                buttons.forEach(b => b.setDisabled(true));
                 await confirmationMsg.edit({content: `${msg.author}\nلقد إنتهى الوقت المحدد ❌\nلقد تم حفظ تقدمكم بنجاح 😘`});
                 return;
             } catch (error) {

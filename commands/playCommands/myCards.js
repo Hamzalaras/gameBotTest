@@ -17,7 +17,7 @@ module.exports = {
             }
 
             const cardsIds = getCards.map(obj => obj.card_id);
-            const serverAvatar = await msg.guild.iconURL({ dynamic: true, size: 2048}) ?? null;
+            const serverAvatar = await msg.guild.iconURL({ dynamic: true, size: 2048});
 
             const cardEmbed = new EmbedBuilder()
                                 .setTitle(`بطاقاتي`)

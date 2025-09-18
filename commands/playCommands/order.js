@@ -66,6 +66,16 @@ module.exports = {
                     throw new CollectorError(error.message);
                 }
             });
+
+            responseCollector.on('end', async interaction => {
+                try {
+                    commandSelectMenu.setDisabled(true);
+                    await commandSelectMenuResponse.edit({content: `${msg.author}\n إنتهى الوقت المخصص لهذه العملية يرجى المحاولة مرة اخرى😘`, components: [commandSelectMenuRow]});
+                    return;
+                } catch (error) {
+                    throw new CollectorError(error.message);
+                }
+            });
         }catch(error){
             await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر: \`أوامر\`');
             return;

@@ -15,15 +15,12 @@ module.exports ={
                               .addFields(
                                 { name: 'هام:', value: '\*\*يرجى قراءة شرح هذا الأمر عن طريق طباعة الأمر: \`مساعدة\` \`تفعيل_قصة\`\*\*'}
                               );
-        const confirmationBTN = new ButtonBuilder()
-                                    .setCustomId('confirmation')
-                                    .setStyle(ButtonStyle.Danger)
-                                    .setLabel('تأكيد');
-        const rejectBTN = new ButtonBuilder()
-                              .setCustomId('reject')
-                              .setStyle(ButtonStyle.Primary)
-                              .setLabel('رفض');
-        const buttonsRow = new ActionRowBuilder().addComponents(confirmationBTN, rejectBTN);
+        const buttons = [
+                         new ButtonBuilder().setCustomId('confirmation').setLabel('تأكيد').setStyle(ButtonStyle.Danger),
+                         new ButtonBuilder().setCustomId('reject').setLabel('رفض').setStyle(ButtonStyle.Primary)
+                        ]                      
+                                           
+        const buttonsRow = new ActionRowBuilder().addComponents(buttons);
 
         try {
             const filter = i => i.user.id === msg.author.id;

@@ -19,7 +19,6 @@ module.exports = {
             ]
                     
             const characterData = characters.find(c => c.name == characterInfo.character_name);
-            console.log(characterData.initialMagic);
             const profileEmbed = new EmbedBuilder()
                                     .setTitle(`ملف خاص ب: ${basicInfo.player_name}`)
                                     .setColor('Green')

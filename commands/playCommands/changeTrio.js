@@ -36,6 +36,9 @@ module.exports = {
             const collector = await confirmationMsg.awaitMessageComponent({ filter, time: 30_000});
 
             if(collector.customId){
+                
+                [attaqueBtn, defenceBtn].forEach(btn => btn.setDisabled(true));
+                await confirmationMsg.edit({components: [row]});
                 const ky = collector.customId;
                 const modal = new ModalBuilder()
                                 .setTitle(`تغيير تشكيلة ال${ky}`)
@@ -62,7 +65,7 @@ module.exports = {
                 modal.addComponents(rows);
                 await collector.showModal(modal);
                 const submitted = await collector.awaitModalSubmit({ filter, time: 120_000 });
-                submitted.deferUpdate();
+                await submitted.deferUpdate();
 
                 if(submitted.customId !== 'modal') return;
                 const [firstValue, secondValue, thirdValue ] = [ 
