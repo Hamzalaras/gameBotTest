@@ -50,7 +50,6 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
             }).concat(quiteBTN);
             const row = new ActionRowBuilder().addComponents(buttons);
 
-            await confirmationMsg.edit({embeds: []});
             await confirmationMsg.edit({content: `${content}`, files: photo, components: [row]});
             const collector = await confirmationMsg.awaitMessageComponent({ filter, time: 30_000 });
             if(collector.customId === 'تعطيل'){
@@ -93,5 +92,21 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
 
     }
 } 
+
+async function pointsCollector(deck, typeOfDeck){
+    try {
+        let points  = 0; 
+        const nature = [];
+        const type = [];
+
+        deck.forEach(ele =>{
+            points += ele.power;
+            ele.type === 'both' ? type.push(typeOfDeck) : type.push(ele.type);
+        });
+        
+    } catch (error) {
+        throw error;
+    }
+}
 
 module.exports = { random, gameHandling };

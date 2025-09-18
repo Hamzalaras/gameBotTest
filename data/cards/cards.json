@@ -3,23 +3,35 @@
         "value": "عامة",
         "cards": [
             {
-                "name": "حمزة",
+                "name": "test1",
                 "photo": "first.jpg",
+                "nature": "spell",
+                "type": "attaque",
+                "power": 10,
                 "id": "1"
             },
             {
-                "name": "بسبس",
+                "name": "test2",
                 "photo": "",
+                "nature": "troop",
+                "type": "attaque",
+                "power": 15,
                 "id": "2"
             },
             {
-                "name": "نن",
+                "name": "test3",
                 "photo": "",
+                "nature": "skill",
+                "type": "attaque",
+                "power": 6,
                 "id": "3"
             },
             {
-                "name": "ثث",
+                "name": "test4",
                 "photo": "",
+                "nature": "troop",
+                "type": "defence",
+                "power": 20,
                 "id": "4"
             }
         ]

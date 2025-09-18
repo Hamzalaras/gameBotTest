@@ -29,6 +29,7 @@ module.exports ={
             
             if(collector.customId === 'confirmation'){
                 await collector.deferUpdate();
+                await confirmationMsg.edit({embeds: []});
                 await gameHandling(Management, msg, confirmationMsg, filter);
                 return;
             }else if(collector.customId === 'reject'){
