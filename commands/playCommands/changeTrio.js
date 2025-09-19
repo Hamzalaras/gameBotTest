@@ -80,29 +80,41 @@ module.exports = {
                 }
 
                 const cards = cardsJson.flatMap(type => type.cards);
-                const [firstCard, secondCard, thirdCard] =  [firstValue, secondValue, thirdValue].map(v => 
+                const [firstCardObj, secondCardObj, thirdCardObj] =  [firstValue, secondValue, thirdValue].map(v => 
                                                             isNaN(v) 
                                                                 ? cards.find(c => c.name === v) 
                                                                 : cards[v - 1]
                                                             );
 
-                if(!firstCard || !secondCard || !thirdCard){
+                if(!firstCardObj || !secondCardObj || !thirdCardObj){
                     await ErrorUnit.throwError(false, msg, `لم يتم العثور على المعلومات التي تم إدخالها!!: \`\`${firstValue}\`\` \`\`${secondValue}\`\` \`\`${thirdValue}\`\``);
                     return;
-                }
-                                    
-                const oldTrio = await Management.selectManager(['first_card', 'second_card', 'third_card'], `players_team_${ky}`, 'player_id', msg.author.id);
+                }                                            
+                const dispoArr = [
+                    await Management.selectManager(['card_id'], 'players_card', ['player_id', 'card_id'], [msg.author.id, firstCardObj.id]),
+                    await Management.selectManager(['card_id'], 'players_card', ['player_id', 'card_id'], [msg.author.id, secondCardObj.id]),
+                    await Management.selectManager(['card_id'], 'players_card', ['player_id', 'card_id'], [msg.author.id, thirdCardObj.id])
+                ] ;    
+
+                for(let i = 0; i < dispoArr.length; i++){
+                    if(dispoArr[i].length === 0){
+                        await ErrorUnit.throwError(false, msg, `ليس لديك البطاقة رقم \*\*${i}\*\* التي أدخلتها!!`);
+                        return;
+                    }
+                }                                      
+                  
+                const oldTrio = await Management.selectManager(['first_card', 'second_card', 'third_card'], `players_team_${ky}`, ['player_id'], [msg.author.id]);
                 oldTrio.length > 0 ? 
                     await Management.updateManager(
                         ['first_card', 'second_card', 'third_card'],
                         `players_team_${ky}`,
-                        [`${firstCard.id}`, `${secondCard.id}`, `${thirdCard.id}`],
+                        [`${firstCardObj.id}`, `${secondCardObj.id}`, `${thirdCardObj.id}`],
                         'player_id', msg.author.id
                     ) :
                     await Management.insertManager(
                         ['player_id' ,'first_card', 'second_card', 'third_card'],
                         `players_team_${ky}`,
-                        [msg.author.id ,`${firstCard.id}`, `${secondCard.id}`, `${thirdCard.id}`]
+                        [msg.author.id ,`${firstCardObj.id}`, `${secondCardObj.id}`, `${thirdCardObj.id}`]
                     ) ;
 
                 confirmationEmbed.setDescription(`تم تحديث تشكيلة ال${ky} الخاصة بكم بنجاح 😘`);

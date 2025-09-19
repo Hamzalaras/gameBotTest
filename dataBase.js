@@ -13,11 +13,12 @@ const dataBase =  mysql.createPool({
 
 class Management{
 
-    static async selectManager(columns, table, where, value){
-        //NOTE: EXPECTING ARRAY ON COLUMNS
+    static async selectManager(columns, table, where, values){
+        //NOTE: EXPECTING ARRAY ON COLUMNS, WHERE, VALUE
         try {
-            const query = `SELECT ${columns.join(', ')} FROM ${table} WHERE ${where} = ?`;
-            const [row] = await dataBase.query(query, [value]);
+            const whereClause = where.map(w => `${w} = ?`).join('AND');
+            const query = `SELECT ${columns.join(', ')} FROM ${table} WHERE ${whereClause}`;
+            const [row] = await dataBase.query(query, values);
             return row;
         } catch (error) {
             throw new DatabaseError(error.message);

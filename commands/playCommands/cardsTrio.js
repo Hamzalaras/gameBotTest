@@ -16,7 +16,7 @@ module.exports = {
                 throw new FalseInput('تشكيلة');
             }
 
-            const userTeam = (await Management.selectManager(['first_card', 'second_card', 'third_card'], `players_team_${keyWord}`, 'player_id', msg.author.id))[0];
+            const userTeam = (await Management.selectManager(['first_card', 'second_card', 'third_card'], `players_team_${keyWord}`, ['player_id'], [msg.author.id]))[0];
             if(!userTeam){
                 await ErrorUnit.throwError(false, msg, 'ليست لديك اي تشكيلة حاليا!!\nيرجى طباعة الأمر: \`later\`');
                 return;

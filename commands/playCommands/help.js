@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const { ErrorUnit } = require('../../centralUnits/errorUnit.js');
+const { ErrorUnit, FalseInput } = require('../../centralUnits/errorUnit.js');
 const path = require('path');
 
 module.exports = {
@@ -7,6 +7,8 @@ module.exports = {
     path: { 'playCommands': [2, 1] },
     async execute(msg, args){
         try {
+            if(!args[1]) throw new FalseInput('مساعدة');
+            const commandsNames = [...msg.client.commands.keys()];
             const targetCommand = commandsNames.map(name => msg.client.commands.get(name))
                                     .find(command => command.name && command.name.includes(args[1]));
             if(!targetCommand){
@@ -16,8 +18,8 @@ module.exports = {
 
             const pathToCommand = targetCommand.path;
             const folderName = Object.keys(pathToCommand)[0];
-            const values = Object.values[0]; 
-            const jsonPath = path.join(__dirname, '..', folderName, '.json');
+            const values = Object.values(pathToCommand)[0]; 
+            const jsonPath = path.join(__dirname, '..', folderName, 'help.json');
             const commands = require(jsonPath);
 
             const help = commands.commands[values[0]].data[values[1]].help;
@@ -39,7 +41,7 @@ module.exports = {
             await msg.channel.send({content: `${msg.author}`, embeds: [faceEmbed]});
             return;
         } catch (error) {
-            await ErrorUnit(error, msg, 'حدث خطأ أثناء تنفيذ الأمر \`مساعدة \`');
+            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر \`مساعدة \`');
             return;
         }                      
     }

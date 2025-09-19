@@ -15,7 +15,7 @@ class ChannelManager{
                 return;
             }
 
-            const ids = await Management.selectManager(['channel_id'], 'servers', 'server_id', guild.id);
+            const ids = await Management.selectManager(['channel_id'], 'servers', ['server_id'], [guild.id]);
             if(ids.some(item => item.channel_id == targetChannel.id )){
                 await this.i.editReply(`بوت الحكمة مفعل في هذا الروم: \"${targetChannel.name}\" أصلا.`);
                 return;
@@ -41,7 +41,7 @@ class ChannelManager{
                 return;
             }
 
-            const ids = await Management.selectManager(['channel_id'], 'servers', 'server_id', guild.id);
+            const ids = await Management.selectManager(['channel_id'], 'servers', ['server_id'], [guild.id]);
             if(!ids.some(item => item.channel_id == targetChannel.id )){
                 await this.i.editReply(`بوت الحكمة غير مفعل في هذا الروم: "${targetChannel.name}" أصلا.`);
                 return;

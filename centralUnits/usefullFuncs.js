@@ -16,7 +16,7 @@ const quiteBTN = [new ButtonBuilder()
 async function gameHandling(Management, msg, confirmationMsg, filter, advanture = false){
 
     //if(!advanture) {}
-    let position = (await Management.selectManager(['story_position'], 'players', 'player_id', msg.author.id))[0].story_position;
+    let position = (await Management.selectManager(['story_position'], 'players', ['player_id'], [msg.author.id]))[0].story_position;
     let buttons = [];
     try {
         
@@ -101,7 +101,7 @@ function count(arr){
     return final;
 }
 
-async function pointsCollector(deck, typeOfDeck){
+function pointsCollector(deck, typeOfDeck){
     try {
         let points  = 10;
         const [nature, type] = [[], []];
@@ -111,11 +111,12 @@ async function pointsCollector(deck, typeOfDeck){
             ele.type === 'both' ? type.push(typeOfDeck) : type.push(ele.type);
             nature.push(ele.nature);
         });
+        
         const [countType, countNature] = [count(type), count(nature)];
 
         Object.values(countNature).filter(v => v == 0).forEach(zero => points -= 5); 
-        
-        points **= countType.typeOfDeck;
+
+        points **= countType[typeOfDeck] || 0;
 
         return points;
     } catch (error) {

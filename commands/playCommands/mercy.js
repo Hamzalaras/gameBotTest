@@ -76,9 +76,9 @@ module.exports = {
                     if(editedConfirmation.customId === 'chosen'){
                         await editedConfirmation.deferUpdate();
                         await Management.insertManager(
-                            ['player_name', 'discord_id', 'character_selected', 'story_position'],
+                            ['player_name', 'player_id', 'character_selected', 'lvl'],
                             'players',
-                            msg.author.globalName, msg.author.id, targetCharacter.name, targetCharacter.initialShahwaLevel
+                            [`${msg.author.globalName}`, `${msg.author.id}`, `${targetCharacter.name}`, `${targetCharacter.initialShahwaLevel}`]
                         );
                         await rahmaResponse.edit({content: 'لقد تمت اضافتك كلاعب بنجاح!! 😘\n يرجى طباعة الأمر: \`أوامر\` لعرض أوامر البوت 🥰', embeds:[], components: []});
                         return;

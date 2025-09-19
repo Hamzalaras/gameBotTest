@@ -41,7 +41,7 @@ class ErrorUnit{
             }
             let responseObj = null;
             if(msg instanceof Message){
-                responseObj =  await msg.reply(`${msg.author}\n${response} 🥲`);
+                responseObj =  await msg.channel.send(`${msg.author}\n${response} 🥲`);
             }else if(msg instanceof BaseInteraction){
                 responseObj = await msg.editReply(`${msg.user}\n${response} 🥲`);
             }      

@@ -10,7 +10,7 @@ module.exports = {
     async execute(msg){
         try {
 
-            const getCards = await Management.selectManager(['card_id'], 'players_cards', 'player_id', msg.author.id);
+            const getCards = await Management.selectManager(['card_id'], 'players_cards', ['player_id'], [msg.author.id]);
             if(getCards.length == 0){
                 await ErrorUnit.throwError(false, msg, `${msg.author}\nليست لديك اي بطاقة حاليا 🥲`)
                 return;
