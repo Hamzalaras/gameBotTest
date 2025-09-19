@@ -116,7 +116,7 @@ function pointsCollector(deck, typeOfDeck){
 
         Object.values(countNature).filter(v => v == 0).forEach(zero => points -= 5); 
 
-        points **= countType[typeOfDeck] || 0;
+        points += (countType[typeOfDeck] * 100) || 0;
 
         return points;
     } catch (error) {
@@ -124,4 +124,4 @@ function pointsCollector(deck, typeOfDeck){
     }
 }
 
-module.exports = { random, gameHandling, pointsCollector };
+module.exports = { random, gameHandling, pointsCollector, count };

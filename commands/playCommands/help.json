@@ -40,6 +40,10 @@
                 {
                     "commandName": "هاجم",
                     "help": "later"
+                },
+                {
+                    "commandName": "بريدي",
+                    "help": "later"
                 }
             ]
         },

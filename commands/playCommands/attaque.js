@@ -6,12 +6,12 @@ const cardsJSON = require('../../data/cards/cards.json');
 
 module.exports = {
     name: ['هاجم', 'هجوم', 'مهاجمة', 'مهاجمه'],
-    path: { 'playCommand': [1, 6]},
+    path: { 'playCommands': [1, 6]},
     need: true,
     async execute(msg, args){
         try {
             const user = msg.mentions.users.first();
-            if(!user || msg.mentions.users.size !== 1 || user.id !== args[1]?.match(/\d+/)?.[0]) throw new FalseInput('هاجم');
+            if(!user || msg.mentions.users.size !== 1 || user.id !== args[1]?.match(/\d+/)?.[0] || user.id == msg.author.id) throw new FalseInput('هاجم');
 
             const isIt = await Management.selectManager(['player_name'], 'players', ['player_id'], [user.id]);
             if(isIt.length === 0){
@@ -63,11 +63,11 @@ module.exports = {
                                     },
                                     {
                                       name : `الفائز:`,
-                                      value: `${winner}`  
+                                        value: `${winner}`, inline: true  
                                     },
                                     {
                                       name : `الخاسر:`,
-                                      value: `${loser}`  
+                                        value: `${loser}`, inline: true  
                                     }
                                  );
             await msg.channel.send({constent: `${msg.author}`, embeds: [resultEmbed]}); 
