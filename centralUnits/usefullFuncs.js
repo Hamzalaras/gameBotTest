@@ -93,20 +93,34 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
     }
 } 
 
+function count(arr){
+    let final = {};
+    for(val of arr){
+        final[val] = (final[val] || 0) + 1;
+    };
+    return final;
+}
+
 async function pointsCollector(deck, typeOfDeck){
     try {
-        let points  = 0; 
-        const nature = [];
-        const type = [];
+        let points  = 10;
+        const [nature, type] = [[], []];
 
         deck.forEach(ele =>{
             points += ele.power;
             ele.type === 'both' ? type.push(typeOfDeck) : type.push(ele.type);
+            nature.push(ele.nature);
         });
+        const [countType, countNature] = [count(type), count(nature)];
+
+        Object.values(countNature).filter(v => v == 0).forEach(zero => points -= 5); 
         
+        points **= countType.typeOfDeck;
+
+        return points;
     } catch (error) {
         throw error;
     }
 }
 
-module.exports = { random, gameHandling };
+module.exports = { random, gameHandling, pointsCollector };
