@@ -50,8 +50,9 @@ class Management{
     static async updateManager(columns, table, values, where, whereVal){
         try {
             const columnsClause = columns.map(col => `${col} = ?`).join(', ');
-            const query = `UPDATE ${table} SET ${columnsClause} WHERE ${where} = ?`;
-            const [row] = await dataBase.query(query, [...values, whereVal]);
+            const whereClause = where.map(w => `${w} = ?`).join('AND');
+            const query = `UPDATE ${table} SET ${columnsClause} WHERE ${whereClause}`;
+            const [row] = await dataBase.query(query, [...values, ...whereVal]);
             return
         } catch (error) {
             throw new DatabaseError(error.message);

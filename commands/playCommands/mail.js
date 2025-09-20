@@ -9,24 +9,24 @@ module.exports ={
     need: true,
     async execute(msg){
         try {
-            const getChests = await Management.selectManager(['chest_type'], 'players_mail_chests', ['player_id'], [33]);
+            const getChests = await Management.selectManager(['chest_type', 'chest_num'], 'players_mail_chests', ['player_id'], [33]);
             if(getChests.length === 0){
                 await ErrorUnit.throwError(false, msg, 'بريدكم فارغ حاليا!!');
                 return;
             }
-            const chestsTypes = count(Object.values(getChests[0]));
-            
-            const content = [];
-            for(const [type, num] of Object.entries(chestsTypes)){
-                content.push(
-                    { name: `الصناديق من النوع ال${type}:`,
-                        value: `--لديكم \*\*${num}\*\* صناديق ${type}`
-                    }
-                );
-            };
+
+            const chestsTypes = getChests.map(obj => [Object.values(obj)[0], Object.values(obj)[1]] );
+
             const mailEmbed = new EmbedBuilder()
                                   .setTitle(`بريد اللاعب ${msg.author}`)
-                                  .addFields(content);
+                                  .addFields(
+                                    chestsTypes.map(type => { 
+                                        return {
+                                            name: `الصناديق من النوع ال${type[0]}:`,
+                                              value: `--لديكم \*\*${type[1]}\*\* صناديق ${type[0]}`
+                                        }
+                                    })
+                                  );
 
             await msg.channel.send({content: `${msg.author}`, embeds: [mailEmbed]});
             return;                      
