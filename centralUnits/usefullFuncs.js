@@ -116,7 +116,7 @@ function pointsCollector(deck, typeOfDeck){
 
         Object.values(countNature).filter(v => v == 0).forEach(zero => points -= 5); 
 
-        points += (countType[typeOfDeck] * 100) || 0;
+        points += (countType[typeOfDeck] * points) || 0;
 
         return points;
     } catch (error) {
@@ -124,4 +124,51 @@ function pointsCollector(deck, typeOfDeck){
     }
 }
 
-module.exports = { random, gameHandling, pointsCollector, count };
+const info = {
+    'عام': {
+        cards: [{'عامة': 2}],
+        welth: [{'gold': 100}, {'daimands': 5}],
+        rate: 60
+    },
+    'نادر': {
+        cards: [{'عامة': 5}, {'نادرة': 2}],
+        welth: [{'gold': 200}, {'daimands': 10}],
+        rate: 25
+    },
+    'واعر': {
+        cards: [{'عامة': 8}, {'نادرة': 5}, {'أسطورية': 1}],
+        welth: [{'gold': 300}, {'daimands': 15}],
+        rate: 10
+    },
+    'هارب': {
+        cards: [{'عامة': 15}, {'نادرة': 10}, {'أسطورية': 4}],
+        welth: [{'gold': 700}, {'daimands': 40}],
+        rate: 5
+    }
+}
+
+function chestGenerator(type = false){
+    try {
+        let [chest, chances] = [undefined, 0];
+
+        const random = Math.random() * 100;
+        if(type){
+            chest = {type, ...info[type]};
+        }else{
+            for(const [type, data] of Object.entries(info)){
+                chances += data.rate;
+                if(random < chances){
+                    chest = {type, ...data};
+                    break;
+                }
+            }
+        }
+        if(!chest) throw new Error('خطأ');
+        return chest;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+module.exports = { random, gameHandling, count, pointsCollector, chestGenerator };
