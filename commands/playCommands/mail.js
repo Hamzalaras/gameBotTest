@@ -22,8 +22,8 @@ module.exports ={
                     { name: `الصناديق من النوع ال${type}:`,
                         value: `--لديكم \*\*${num}\*\* صناديق ${type}`
                     }
-                )
-            }
+                );
+            };
             const mailEmbed = new EmbedBuilder()
                                   .setTitle(`بريد اللاعب ${msg.author}`)
                                   .addFields(content);

@@ -1,6 +1,7 @@
 const { ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder } = require('discord.js');
 const { ErrorUnit } = require('./errorUnit.js');
 const path = require('path');
+const cardsJson = require('../data/cards/cards.json');
 const story = require('../data/story/firstPort/firstPort.json');
 const consequences = require('../data/story/firstPort/consequences.json');
 
@@ -151,7 +152,7 @@ function chestGenerator(type = false){
     try {
         let [chest, chances] = [undefined, 0];
 
-        const random = Math.random() * 100;
+        const rand = Math.random() * 100;
         if(type){
             chest = {type, ...info[type]};
         }else{
@@ -164,11 +165,25 @@ function chestGenerator(type = false){
             }
         }
         if(!chest) throw new Error('خطأ');
+
+        const cards = chest.cards.map(type => {
+            const [typeName, num, cards] = [Object.keys(type)[0], Object.values(type)[0], []];
+
+            for(let i = 0; i < num; i++){
+                cards.push(
+                    random(cardsJson.find(v => v.value === typeName).cards)
+                )
+            }
+            return cards;
+        }).flat();
+        chest.cards = cards;
+
         return chest;
     } catch (error) {
         throw error;
     }
 }
+chestGenerator('عام');
 
 
 module.exports = { random, gameHandling, count, pointsCollector, chestGenerator };
