@@ -167,14 +167,13 @@ function chestGenerator(type = false){
         if(!chest) throw new Error('خطأ');
 
         const cards = chest.cards.map(type => {
-            const [typeName, num, cards] = [Object.keys(type)[0], Object.values(type)[0], []];
+            const [typeName, num, collected] = [Object.keys(type)[0], Object.values(type)[0], []];
 
             for(let i = 0; i < num; i++){
-                cards.push(
-                    random(cardsJson.find(v => v.value === typeName).cards)
-                )
-            }
-            return cards;
+                const card = random(cardsJson.find(v => v.value === typeName).cards);
+                collected.some(c => c.id === card.id) ? i-- : collected.push(card);
+            };
+            return collected;
         }).flat();
         chest.cards = cards;
 

@@ -16,7 +16,7 @@ class Management{
     static async selectManager(columns, table, where, values){
         //NOTE: EXPECTING ARRAY ON COLUMNS, WHERE, VALUE
         try {
-            const whereClause = where.map(w => `${w} = ?`).join('AND');
+            const whereClause = where.map(w => `${w} = ?`).join(' AND ');
             const query = `SELECT ${columns.join(', ')} FROM ${table} WHERE ${whereClause}`;
             const [row] = await dataBase.query(query, values);
             return row;
@@ -38,7 +38,7 @@ class Management{
 
     static async deleteManager(table, columns, value){
         try {
-            const columnsClause = columns.map(col => `${col}= ?`).join('AND');
+            const columnsClause = columns.map(col => `${col}= ?`).join(' AND ');
             const query = `DELETE FROM ${table} WHERE ${columnsClause}`;
             const [row] = await dataBase.query(query, value);
             return;
@@ -50,7 +50,7 @@ class Management{
     static async updateManager(columns, table, values, where, whereVal){
         try {
             const columnsClause = columns.map(col => `${col} = ?`).join(', ');
-            const whereClause = where.map(w => `${w} = ?`).join('AND');
+            const whereClause = where.map(w => `${w} = ?`).join(' AND ');
             const query = `UPDATE ${table} SET ${columnsClause} WHERE ${whereClause}`;
             const [row] = await dataBase.query(query, [...values, ...whereVal]);
             return

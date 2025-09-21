@@ -89,7 +89,7 @@ module.exports = {
                 if(!firstCardObj || !secondCardObj || !thirdCardObj){
                     await ErrorUnit.throwError(false, msg, `لم يتم العثور على المعلومات التي تم إدخالها!!: \`\`${firstValue}\`\` \`\`${secondValue}\`\` \`\`${thirdValue}\`\``);
                     return;
-                }                                            
+                };
                 const dispoArr = [
                     await Management.selectManager(['card_id'], 'players_card', ['player_id', 'card_id'], [msg.author.id, firstCardObj.id]),
                     await Management.selectManager(['card_id'], 'players_card', ['player_id', 'card_id'], [msg.author.id, secondCardObj.id]),
