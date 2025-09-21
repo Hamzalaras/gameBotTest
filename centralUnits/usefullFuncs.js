@@ -143,7 +143,7 @@ const info = {
     },
     'هارب': {
         cards: [{'عامة': 15}, {'نادرة': 10}, {'أسطورية': 4}],
-        welth: [{'gold': 700}, {'daimands': 40}],
+        welth: [{'gold': 700}, {'daimands': 40}, {'coins': 10}],
         rate: 5
     }
 }

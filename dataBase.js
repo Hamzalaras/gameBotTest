@@ -53,7 +53,7 @@ class Management{
             const whereClause = where.map(w => `${w} = ?`).join(' AND ');
             const query = `UPDATE ${table} SET ${columnsClause} WHERE ${whereClause}`;
             const [row] = await dataBase.query(query, [...values, ...whereVal]);
-            return
+            return;
         } catch (error) {
             throw new DatabaseError(error.message);
         }
