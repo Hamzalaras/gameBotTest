@@ -12,7 +12,7 @@ module.exports = {
             const chestName = args[1];
             if(!(['عام', 'نادر', 'واعر', 'هارب'].some(i => i === chestName))) throw new FalseInput('فتح_صندوق');
 
-            const getChestInfo = await Management.selectManager(['chest_type', 'chest_num'], 'players_mail_chests', ['player_id', 'chest_type'], [33, chestName]);
+            const getChestInfo = await Management.selectManager(['chest_type', 'chest_num'], 'players_mail_chests', ['player_id', 'chest_type'], ['959061410514632734', chestName]);
 
             console.log(getChestInfo);
             if(getChestInfo.length === 0){
@@ -61,8 +61,19 @@ module.exports = {
                                     .setTitle(`فتح_صندوق ${chestName}`)
                                     .setDescription(`تم فتح الصندوق ${chestName} بنجاح\nتحصلتم على:`)
                                     .addFields(
-                                        
-                                    )          
+                                        cards.map(c => {
+                                            return { name: `بطاقة \`\`${c.name}\`\`:`,
+                                                       value: `بطاقة من النوع \*\*${c.type}\*\* تنتمي إلى \*\*${c.nature}\*\*.\nمعرفها \*\*${c.id}\*\*.`
+                                                   }
+                                        })
+                                    )
+                                    .addFields(
+                                        { name: `الثروة:`,
+                                            value: `${welth.map(t => `\*\*${Object.values(t)[0]}\*\* قطعة من \*\*${Object.keys(t)[0]}\*\*.\n` )}`
+                                        }
+                                    )
+                                            
+            await msg.channel.send({content: `${msg.author}`, embeds: [resultEmbed]});                        
             return;
         } catch (error) {
             await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر \`\`فتح_صندوق\`\`');
