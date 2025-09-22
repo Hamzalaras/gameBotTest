@@ -9,7 +9,7 @@ module.exports ={
     need: true,
     async execute(msg){
         try {
-            const getChests = await Management.selectManager(['chest_type', 'chest_num'], 'players_mail_chests', ['player_id'], [33]);
+            const getChests = await Management.selectManager(['chest_type', 'chest_num'], 'players_mail_chests', ['player_id'], [msg.author.id]);
             if(getChests.length === 0){
                 await ErrorUnit.throwError(false, msg, 'بريدكم فارغ حاليا!!');
                 return;

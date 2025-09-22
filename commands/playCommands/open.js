@@ -14,7 +14,6 @@ module.exports = {
 
             const getChestInfo = await Management.selectManager(['chest_type', 'chest_num'], 'players_mail_chests', ['player_id', 'chest_type'], ['959061410514632734', chestName]);
 
-            console.log(getChestInfo);
             if(getChestInfo.length === 0){
                 await ErrorUnit.throwError(false, msg, `ليس لديكم هذا النوع من الصناديق: ${chestName}`);
                 return;

@@ -1,7 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 const { ErrorUnit, FalseInput } = require('../../centralUnits/errorUnit.js');
 const { Management } = require('../../dataBase.js');
-const { pointsCollector } = require('../../centralUnits/usefullFuncs.js');
+const { pointsCollector, chestGenerator } = require('../../centralUnits/usefullFuncs.js');
 const cardsJSON = require('../../data/cards/cards.json');
 
 module.exports = {
@@ -50,7 +50,19 @@ module.exports = {
             const defencePoints = pointsCollector(defenceDeck, 'defence');
             const [winner, loser] = attaquePoints > defencePoints ?
                                    [msg.author, user] : [user, msg.author] ;
-            
+
+            const chest =  chestGenerator();
+
+            const num = (await Management.selectManager(['chest_num'], 'players_mail_chests', ['player_id', 'chest_type'], [msg.author.id, chest.type]))?.[0]?.chest_num;
+            console.log(num); 
+            num ? 
+                await Management.updateManager(['chest_num'], 'players_mail_chests', [`${Number(num) + 1}`], ['player_id', 'chest_type'], [msg.author.id, chest.type]) :
+                await Management.insertManager(
+                    ['player_name', 'player_id', 'chest_type', 'chest_num'],
+                    'players_mail_chests',
+                    [msg.author.globalName, msg.author.id, chest.type, '1']
+                );
+
             const resultEmbed = new EmbedBuilder()
                                  .setTitle('نتيجة الهجوم')
                                  .setDescription(`قام اللاعب: ${msg.author} بمهاجمة اللاعب: ${user}`)
@@ -63,11 +75,11 @@ module.exports = {
                                     },
                                     {
                                       name : `الفائز:`,
-                                        value: `${winner}`, inline: true  
+                                        value: `${winner}`
                                     },
                                     {
-                                      name : `الخاسر:`,
-                                        value: `${loser}`, inline: true  
+                                      name : `جوائز الفائز:`,
+                                        value: `صندوق من النوع \*\*${chest.type}\*\*`
                                     }
                                  );
             await msg.channel.send({constent: `${msg.author}`, embeds: [resultEmbed]}); 

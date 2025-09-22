@@ -152,13 +152,13 @@ function chestGenerator(type = false){
     try {
         let [chest, chances] = [undefined, 0];
 
-        const rand = Math.random() * 100;
+        const rand = 70//Math.random() * 100;
         if(type){
             chest = {type, ...info[type]};
         }else{
             for(const [type, data] of Object.entries(info)){
                 chances += data.rate;
-                if(random < chances){
+                if(rand < chances){
                     chest = {type, ...data};
                     break;
                 }
@@ -182,7 +182,5 @@ function chestGenerator(type = false){
         throw error;
     }
 }
-chestGenerator('عام');
-
 
 module.exports = { random, gameHandling, count, pointsCollector, chestGenerator };
