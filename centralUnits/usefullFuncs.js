@@ -152,7 +152,7 @@ function chestGenerator(type = false){
     try {
         let [chest, chances] = [undefined, 0];
 
-        const rand = 70//Math.random() * 100;
+        const rand = Math.random() * 100;
         if(type){
             chest = {type, ...info[type]};
         }else{
@@ -178,6 +178,21 @@ function chestGenerator(type = false){
         chest.cards = cards;
 
         return chest;
+    } catch (error) {
+        throw error;
+    }
+}
+
+function getLvl(xp){
+    try {
+        let theGorge = 100;
+        let lvl = 0;
+        while(xp > theGorge){
+            xp = xp - theGorge;
+            lvl++;
+            theGorge += 100;
+        }
+        return {lvl, xp};
     } catch (error) {
         throw error;
     }

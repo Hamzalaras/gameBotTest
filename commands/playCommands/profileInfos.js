@@ -13,7 +13,7 @@ module.exports = {
             const serverAvatar = await msg.guild.iconURL({ dynamic: true, size: 2048});
 
             const [basicInfo, characterInfo, welthInfo] = [
-                (await Management.selectManager(['player_name', 'lvl', 'story_position'], 'players', ['player_id'], [id]))[0],
+                (await Management.selectManager(['player_name', 'xp', 'story_position'], 'players', ['player_id'], [id]))[0],
                 (await Management.selectManager(['character_name', 'attaque', 'deffanse', 'magic', 'physic'], 'players_characters', ['player_id'], [id]))[0],
                 (await Management.selectManager(['gold', 'diamands', 'coins'], 'players_welth', ['player_id'], [id]))[0]
             ]
