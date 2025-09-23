@@ -52,15 +52,24 @@ module.exports = {
                                    [msg.author, user] : [user, msg.author] ;
 
             const chest =  chestGenerator();
+            const xpPoints = Math.floor(Math.random() * 100);
 
-            const num = (await Management.selectManager(['chest_num'], 'players_mail_chests', ['player_id', 'chest_type'], [msg.author.id, chest.type]))?.[0]?.chest_num;
-            console.log(num); 
+            const num = (await Management.selectManager(['chest_num'], 'players_mail_chests', ['player_id', 'chest_type'], [winner.id, chest.type]))?.[0]?.chest_num;
+            const [winnerOldXp, loserOldXp] = [
+                (await Management.selectManager(['xp'], 'players', ['player_id'], [winner.id]))[0].xp,
+                (await Management.selectManager(['xp'], 'players', ['player_id'], [loser.id]))[0].xp
+            ];
+
+            await Management.updateManager(['xp'], 'players', [`${Number(winnerOldXp) + xpPoints}`], ['player_id'], [winner.id]);
+            if(Number(loserOldXp) < xpPoints) await Management.updateManager(['xp'], 'players', ['0'], ['player_id'], [loser.id]);
+
+
             num ? 
-                await Management.updateManager(['chest_num'], 'players_mail_chests', [`${Number(num) + 1}`], ['player_id', 'chest_type'], [msg.author.id, chest.type]) :
+                await Management.updateManager(['chest_num'], 'players_mail_chests', [`${Number(num) + 1}`], ['player_id', 'chest_type'], [winner.id, chest.type]) :
                 await Management.insertManager(
                     ['player_name', 'player_id', 'chest_type', 'chest_num'],
                     'players_mail_chests',
-                    [msg.author.globalName, msg.author.id, chest.type, '1']
+                    [winner.globalName, winner.id, chest.type, '1']
                 );
 
             const resultEmbed = new EmbedBuilder()
@@ -73,13 +82,14 @@ module.exports = {
                                     { name: `تشكيلة الدفاع الخاصة باللاعب ${user}:`,
                                         value: `${defenceDeck.map(c => `\`\`${c.name}\`\``).join(' -- ')}\nمجموع قوة البطاقات: \*\*${defencePoints}\*\* نقطة .`
                                     },
-                                    {
-                                      name : `الفائز:`,
+                                    { name : `الفائز:`,
                                         value: `${winner}`
                                     },
-                                    {
-                                      name : `جوائز الفائز:`,
-                                        value: `صندوق من النوع \*\*${chest.type}\*\*`
+                                    { name : `جوائز الفائز:`,
+                                        value: `--صندوق من النوع \*\*${chest.type}\*\*\n--${xpPoints} نقاط xp`
+                                    },
+                                    { name: `الخاسر:`,
+                                        value: `--${loser}\nتم خصم ${xpPoints} نقطة xp.`
                                     }
                                  );
             await msg.channel.send({constent: `${msg.author}`, embeds: [resultEmbed]}); 
