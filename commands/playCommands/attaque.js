@@ -89,7 +89,7 @@ module.exports = {
                                         value: `--صندوق من النوع \*\*${chest.type}\*\*\n--${xpPoints} نقاط xp`
                                     },
                                     { name: `الخاسر:`,
-                                        value: `--${loser}\nتم خصم ${xpPoints} نقطة xp.`
+                                        value: `${loser}\n--تم خصم ${xpPoints} نقطة xp.`
                                     }
                                  );
             await msg.channel.send({constent: `${msg.author}`, embeds: [resultEmbed]}); 

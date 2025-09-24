@@ -19,8 +19,10 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
     //if(!advanture) {}
     let position = (await Management.selectManager(['story_position'], 'players', ['player_id'], [msg.author.id]))[0].story_position;
     let buttons = [];
+    let xp = 0;
+    
     try {
-        
+
         let currentFrame = 0;
         let wichSubHistory = false;
         let pass = false; // switch over consequence and main story line !!IMPORTANT!!
@@ -55,10 +57,12 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
             const collector = await confirmationMsg.awaitMessageComponent({ filter, time: 30_000 });
             if(collector.customId === 'تعطيل'){
                 await collector.deferUpdate();
-                await Management.updateManager(['story_position'], 'players', [position], 'player_id', msg.author.id);
+                const oldXp = (await Management.selectManager(['xp'], 'players', ['player_id'], [msg.author.id]))[0].xp;
+                await Management.updateManager(['story_position', 'xp'], 'players', [position, `${Number(oldXp) + xp}`], ['player_id'], [msg.author.id]);
                 await confirmationMsg.edit({content: `${msg.author}\nتم حفظ تقدمك بنجاح 😘`});
                 return;
             }
+            xp += 10;
             await collector.deferUpdate();
             wichSubHistory =  data.subHistory.find(obj => obj.button === collector.customId);
             if(!wichSubHistory){
@@ -79,7 +83,8 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
 
         if (error.code === 'InteractionCollectorError' || error.message.includes('time')){
             try {
-                await Management.insertManager(['story_position'], 'players', [position]);
+                const oldXp = (await Management.selectManager(['xp'], 'players', ['player_id'], [msg.author.id]))[0].xp;
+                await Management.updateManager(['story_position', 'xp'], 'players', [position, `${Number(oldXp) + xp}`], ['player_id'], [msg.author.id]);
                 buttons.forEach(b => b.setDisabled(true));
                 await confirmationMsg.edit({content: `${msg.author}\nلقد إنتهى الوقت المحدد ❌\nلقد تم حفظ تقدمكم بنجاح 😘`});
                 return;
@@ -152,7 +157,7 @@ function chestGenerator(type = false){
     try {
         let [chest, chances] = [undefined, 0];
 
-        const rand = Math.random() * 100;
+        const rand = Math.random() * 60;
         if(type){
             chest = {type, ...info[type]};
         }else{
@@ -198,4 +203,4 @@ function getLvl(xp){
     }
 }
 
-module.exports = { random, gameHandling, count, pointsCollector, chestGenerator };
+module.exports = { random, gameHandling, count, pointsCollector, chestGenerator, getLvl };

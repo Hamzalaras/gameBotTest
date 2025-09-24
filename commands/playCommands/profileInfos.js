@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 const { ErrorUnit } = require('../../centralUnits/errorUnit.js');
 const { Management } = require('../../dataBase.js');
+const { getLvl } = require('../../centralUnits/usefullFuncs.js');
 const characters = require('../../data/character/character.json');
 
 module.exports = {
@@ -15,9 +16,10 @@ module.exports = {
             const [basicInfo, characterInfo, welthInfo] = [
                 (await Management.selectManager(['player_name', 'xp', 'story_position'], 'players', ['player_id'], [id]))[0],
                 (await Management.selectManager(['character_name', 'attaque', 'deffanse', 'magic', 'physic'], 'players_characters', ['player_id'], [id]))[0],
-                (await Management.selectManager(['gold', 'diamands', 'coins'], 'players_welth', ['player_id'], [id]))[0]
+                (await Management.selectManager(['gold', 'daimands', 'coins'], 'players_welth', ['player_id'], [id]))[0]
             ]
-                    
+
+            const lvl = getLvl(Number(basicInfo.xp));
             const characterData = characters.find(c => c.name == characterInfo.character_name);
             const profileEmbed = new EmbedBuilder()
                                     .setTitle(`ملف خاص ب: ${basicInfo.player_name}`)
@@ -25,9 +27,9 @@ module.exports = {
                                     .setThumbnail(serverAvatar)
                                     .addFields(
                                         { name: `ثروة اللاعب:`, 
-                                            value: `الذهب: \*\*${welthInfo.gold}\*\*\nالجواهر: \*\*${welthInfo.diamands}\*\*\nالعملات: \*\*${welthInfo.coins}\*\*`},
+                                            value: `الذهب: \*\*${welthInfo.gold}\*\*\nالجواهر: \*\*${welthInfo.daimands}\*\*\nالعملات: \*\*${welthInfo.coins}\*\*`},
                                         { name: `مستوى الشهوة:`, 
-                                            value: `\*\*${basicInfo.lvl}\*\*`},
+                                            value: `المستوى \*\*${lvl.lvl}\*\* و \*\*${lvl.xp}\*\* xp.`},
                                         { name: `خصائص شخصية اللاعب:`,
                                             value: `\nاسم الشخصية: \*\*${characterData.name}\*\*\nنقاط الهجوم: \*\*${characterData.initialAttack}\*\* + \*\*${characterInfo.attaque}\*\*\nنقاط الدفاع: \*\*${characterData.initialDefense}\*\* + \*\*${characterInfo.deffanse}\*\*\nنقاط السحر: \*\*${characterData.initialMagic}\*\* + \*\*${characterInfo.magic}\*\*\nنقاط الجسم: \*\*${characterData.initialPhysic}\*\* + \*\*${characterInfo.physic}\*\*\n`},
                                         { name: `وضع القصة:`, 
