@@ -19,10 +19,8 @@ module.exports = {
             await interaction.deferReply({ ephemeral: true });
             const targetChannel = await interaction.options.getChannel('الروم');
             const guild = interaction.guild;
-            if(!guild){
-                await ErrorUnit.throwError(false, interaction, `هذا الأمر صالح في السيرفر فقط!!`)
-                return;
-            };
+            if(!guild) throw new RandomErrors('هذا الأمر صالح في السيرفر فقط!! 😘');
+
             const channelManager = new ChannelManager(interaction);
             await channelManager.deleteChannel(guild, targetChannel, 'Administrator');
             return ;

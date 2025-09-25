@@ -1,5 +1,5 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ModalBuilder, TextInputBuilder, Events } = require('discord.js');
-const { ErrorUnit, CollectorError } = require('../../centralUnits/errorUnit.js');
+const { ErrorUnit, RandomErrors, FalseInput } = require('../../centralUnits/errorUnit.js');
 const cardsJson = require('../../data/cards/cards.json');
 const { Management } = require('../../dataBase.js'); 
 
@@ -9,22 +9,22 @@ module.exports = {
     need: true,
     async execute(msg, args){
         try {
-            
-            if(args[1] !== 'تشكيلة'){
-                throw new FalseInput('تغيير');
-            }
+            //Check the valid input 
+            if(args[1] !== 'تشكيلة') throw new FalseInput('تغيير');
+
+            //Embeds and shit
+            const avatar = msg.client.user.displayAvatarURL({ dynamic: true, size: 1024 });
             const confirmationEmbed = new EmbedBuilder()
-                                          .setTitle('تغيير تشكيلة')
-                                          .setDescription('الرجاء إختيار تشكيلة لتغييرها')
-            const attaqueBtn = new ButtonBuilder()
-                                   .setCustomId('هجوم')
-                                   .setLabel('هجوم')  
-                                   .setStyle(ButtonStyle.Primary);
-            const defenceBtn = new ButtonBuilder()
-                        .setCustomId('دفاع')
-                        .setLabel('دفاع')  
-                        .setStyle(ButtonStyle.Primary);
-            const row = new ActionRowBuilder().addComponents(attaqueBtn, defenceBtn);
+                                          .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${avatar}`})
+                                          .setTitle('🕹️تغيير تشكيلة اللاعب')
+                                          .setDescription('🃏الرجاء إختيار تشكيلة لتغييرها')
+                                          .setColor('Red');
+
+            const buttons = [
+                new ButtonBuilder().setCustomId('هجوم').setLabel('هجوم').setStyle(ButtonStyle.Primary),
+                new ButtonBuilder().setCustomId('دفاع').setLabel('دفاع').setStyle(ButtonStyle.Primary)
+            ];
+            const row = new ActionRowBuilder().addComponents(buttons);
             
             const filter = i => i.user.id === msg.author.id ;
             const confirmationMsg = await msg.channel.send({
@@ -35,15 +35,18 @@ module.exports = {
             });
             const collector = await confirmationMsg.awaitMessageComponent({ filter, time: 30_000});
 
+            //Managing the collector whatever was the customId
             if(collector.customId){
-                
-                [attaqueBtn, defenceBtn].forEach(btn => btn.setDisabled(true));
+
+                //Making the buttons disabled to prevent errors
+                buttons.forEach(btn => btn.setDisabled(true));
                 await confirmationMsg.edit({components: [row]});
+
+                //Modal and shit 
                 const ky = collector.customId;
                 const modal = new ModalBuilder()
                                 .setTitle(`تغيير تشكيلة ال${ky}`)
                                 .setCustomId('modal');
-                
                 const fields = [
                     new TextInputBuilder()
                                 .setCustomId('firstCard')
@@ -61,23 +64,20 @@ module.exports = {
                                 .setStyle(1)
                                 .setRequired(true)                     
                 ];
-                const rows = fields.map(f => new ActionRowBuilder().addComponents(f));
-                modal.addComponents(rows);
+
+                modal.addComponents(fields.map(f => new ActionRowBuilder().addComponents(f)));
                 await collector.showModal(modal);
                 const submitted = await collector.awaitModalSubmit({ filter, time: 120_000 });
                 await submitted.deferUpdate();
 
+                //Handling the modal and values
                 if(submitted.customId !== 'modal') return;
-                const [firstValue, secondValue, thirdValue ] = [ 
+                const [firstValue, secondValue, thirdValue] = [ 
                                                             submitted.fields.getTextInputValue('firstCard'),
                                                             submitted.fields.getTextInputValue('secondCard'),
                                                             submitted.fields.getTextInputValue('thirdCard')
                                                             ];
-
-                if(firstValue == secondValue || secondValue == thirdValue || firstValue == thirdValue){
-                    await ErrorUnit.throwError(false, msg, 'يرجى إدخال قيم مختلفة عن بعضها البعض في كل خانة');
-                    return;
-                }
+                if(firstValue == secondValue || secondValue == thirdValue || firstValue == thirdValue) throw new RandomErrors('يرجى إدخال قيم مختلفة عن بعضها البعض في كل خانة 😘');
 
                 const cards = cardsJson.flatMap(type => type.cards);
                 const [firstCardObj, secondCardObj, thirdCardObj] =  [firstValue, secondValue, thirdValue].map(v => 
@@ -85,24 +85,21 @@ module.exports = {
                                                                 ? cards.find(c => c.name === v) 
                                                                 : cards[v - 1]
                                                             );
+                if(!firstCardObj || !secondCardObj || !thirdCardObj) throw new RandomErrors(`لم يتم العثور على المعلومات التي تم إدخالها!!: \`\`${firstValue}\`\` \`\`${secondValue}\`\` \`\`${thirdValue}\`\` 🥲`);
 
-                if(!firstCardObj || !secondCardObj || !thirdCardObj){
-                    await ErrorUnit.throwError(false, msg, `لم يتم العثور على المعلومات التي تم إدخالها!!: \`\`${firstValue}\`\` \`\`${secondValue}\`\` \`\`${thirdValue}\`\``);
-                    return;
-                };
+                //Check if the msg.author have the given values
                 const dispoArr = [
                     await Management.selectManager(['card_id'], 'players_card', ['player_id', 'card_id'], [msg.author.id, firstCardObj.id]),
                     await Management.selectManager(['card_id'], 'players_card', ['player_id', 'card_id'], [msg.author.id, secondCardObj.id]),
                     await Management.selectManager(['card_id'], 'players_card', ['player_id', 'card_id'], [msg.author.id, thirdCardObj.id])
-                ] ;    
-
+                ] ;
                 for(let i = 0; i < dispoArr.length; i++){
                     if(dispoArr[i].length === 0){
-                        await ErrorUnit.throwError(false, msg, `ليس لديك البطاقة رقم \*\*${i}\*\* التي أدخلتها!!`);
-                        return;
+                        throw new RandomErrors(`ليس لديك البطاقة رقم \*\*${i}\*\* التي أدخلتها!!`);
                     }
                 }                                      
-                  
+                
+                //Updating the deck if exist or insert it if not
                 const oldTrio = await Management.selectManager(['first_card', 'second_card', 'third_card'], `players_team_${ky}`, ['player_id'], [msg.author.id]);
                 oldTrio.length > 0 ? 
                     await Management.updateManager(
@@ -116,19 +113,18 @@ module.exports = {
                         `players_team_${ky}`,
                         [msg.author.id ,`${firstCardObj.id}`, `${secondCardObj.id}`, `${thirdCardObj.id}`]
                     ) ;
-
-                confirmationEmbed.setDescription(`تم تحديث تشكيلة ال${ky} الخاصة بكم بنجاح 😘`);
+                
+                //Send successe
+                confirmationEmbed.setDescription(`تم تحديث تشكيلة \*\*ال${ky}\*\* الخاصة بكم بنجاح 😘`);
                 await confirmationMsg.edit({
                     content: `${msg.author}`,
                     embeds: [confirmationEmbed],
                     components: []
                 });
                 return;
-
             }
-
         } catch (error) {
-            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر \`تغيير\`');
+            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر \`تغيير\` 🥲');
             return;
         }
     }

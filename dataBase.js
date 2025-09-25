@@ -2,6 +2,7 @@ require('dotenv').config();
 const mysql = require('mysql2/promise');
 const { DatabaseError } = require('./centralUnits/errorUnit.js');
 
+//Connection infos 
 const dataBase =  mysql.createPool({
   host: process.env.HOST,
   user: process.env.USER,
@@ -11,10 +12,12 @@ const dataBase =  mysql.createPool({
   bigNumberStrings: true
 });
 
+//Each sql keyWord has a -static- method in Management class, so there is no need to create an instance of a class each time
 class Management{
+                    //Expecting columns, where, values to be an instance of array 
 
+    //To select
     static async selectManager(columns, table, where, values){
-        //NOTE: EXPECTING ARRAY ON COLUMNS, WHERE, VALUE
         try {
             const whereClause = where.map(w => `${w} = ?`).join(' AND ');
             const query = `SELECT ${columns.join(', ')} FROM ${table} WHERE ${whereClause}`;
@@ -25,34 +28,43 @@ class Management{
         }
     }
 
+    //To insert
     static async insertManager(columns, table, values){
         try{
             const valueClause = values.map(val => `?`);
             const query = `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${valueClause.join(', ')})`;
-            await dataBase.query(query, [...values]);
+            const [row] = await dataBase.query(query, [...values]);
+            //Throw an Error if  0 row was affected
+            if(row.affectedRows === 0 ) throw DatabaseError('0 سطر تم إدخاله');
             return;
         } catch (error) {
             throw new DatabaseError(error.message);
         }
     }
 
+    //To delete
     static async deleteManager(table, columns, value){
         try {
             const columnsClause = columns.map(col => `${col}= ?`).join(' AND ');
             const query = `DELETE FROM ${table} WHERE ${columnsClause}`;
             const [row] = await dataBase.query(query, value);
+            //Throw an Error if  0 row was affected
+            if(row.affectedRows === 0 ) throw DatabaseError('0 سطر تم حذفه');
             return;
         } catch (error) {
             throw new DatabaseError(error.message);
         }
     }
 
+    //To update
     static async updateManager(columns, table, values, where, whereVal){
         try {
             const columnsClause = columns.map(col => `${col} = ?`).join(', ');
             const whereClause = where.map(w => `${w} = ?`).join(' AND ');
             const query = `UPDATE ${table} SET ${columnsClause} WHERE ${whereClause}`;
             const [row] = await dataBase.query(query, [...values, ...whereVal]);
+            //Throw an Error if  0 row was affected
+            if(row.affectedRows === 0 ) throw DatabaseError('0 سطر تم تحديثه');
             return;
         } catch (error) {
             throw new DatabaseError(error.message);

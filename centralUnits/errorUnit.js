@@ -1,5 +1,6 @@
-const { Message, BaseInteraction } = require('discord.js');
+const { BaseInteraction } = require('discord.js');
 
+//Customization the Errors name s and shit...
 class BotError extends Error{
     constructor(message){
         super(message);
@@ -7,46 +8,45 @@ class BotError extends Error{
     }
 }
 
+//Some possible Errors 
 class DatabaseError extends BotError{};
-class FetchingError extends BotError{};
-class CollectorError extends BotError{};
-class FalseInput extends BotError{};
 
+// This is for all the other cases where Errors r not really Errors 
+class FalseInput extends BotError{};
+class RandomErrors extends BotError{}; 
+
+//ErrorUnit to manage the Errors messages and replys
 class ErrorUnit{
     static async throwError(err, msg, errMsg = `يبدو أن هناك خطأ ما`){
         let response = '';
         try {
-            if(err){
-                switch (err.name){
-                    case 'DatabaseError':
-                        response = 'حدث خطأ اثناء الإتصال بقاعدة البيانات ';
-                        break;
-                    case 'FetchingError':
-                        response = 'حدث خطأ اثناء الإتصال ب: API';
-                        break;
-                    case 'CollectorError':
-                        response = 'حدث خطأ اثناء تصفح البيانات ';
-                        break;  
-                    case 'StoryError':
-                        response = 'حدث خطأ اثناء عرض القصة ';
-                        break; 
-                    case 'FalseInput':
-                        response = `يرجى استخدام الأمر بالشكل الصحيح!!\nإطبع الأمر \`مساعدة\` \`${err.message}\` للشرح.`;
-                        break;       
-                    default:
-                        response = errMsg;            
-                }
-            }else{
-                response = errMsg;
+            //Select the switable response for each Error that can accure
+            switch (err.name){
+                case 'DatabaseError':
+                    response = 'حدث خطأ اثناء الإتصال بقاعدة البيانات 🥲';
+                    break;
+
+                //Since this Errors r not really Errors there message property will be customize According to there role in code
+                case 'FalseInput':
+                    response = `يرجى استخدام الأمر \`${err.message}\` بالشكل الصحيح!!\nإطبع الأمر \`مساعدة\` \`${err.message}\` للشرح. 😘`;
+                    break;  
+                case 'RandomErrors':
+                    response = err.message;
+                    break;     
+                //If a new Error type accure in code                
+                default:
+                    response = errMsg;
             }
-            let responseObj = null;
-            if(msg instanceof Message){
-                responseObj =  await msg.channel.send(`${msg.author}\n${response} 🥲`);
-            }else if(msg instanceof BaseInteraction){
-                responseObj = await msg.editReply(`${msg.user}\n${response} 🥲`);
-            }      
+
+            //Detecting if the -msg- object is an interaction base or a message base, so i can use the switable way to response
+            const responseObj = msg instanceof BaseInteraction ? 
+                                    await msg.editReply(`${msg.user}\n${response}`):
+                                    await msg.channel.send(`${msg.author}\n${response}`);
+    
+            //Planing to add an dashBoard soon!!                        
             console.error(err);      
-            await deleteError(responseObj, msg);
+            //Deleting the Error message so there is no accumulation in discord channels
+            deleteError(responseObj, msg);
             return;
 
         } catch (error) {
@@ -55,12 +55,13 @@ class ErrorUnit{
     }
 }
 
-async function deleteError(obj, msg){
+//Delete the messages 
+function deleteError(obj, msg){
     setTimeout(()=>{
         obj.delete().catch(async err => {
-            await ErrorUnit.throwError(err, msg, 'حدث خطأ أثناء محاولة حذف رسالة الخطأ');
+            await ErrorUnit.throwError(err, msg, 'حدث خطأ أثناء محاولة حذف رسالة الخطأ 🥲');
         })
     }, 4_000)
 }
 
-module.exports = { DatabaseError, FetchingError, CollectorError, FalseInput, ErrorUnit };
+module.exports = { DatabaseError, FalseInput, RandomErrors, ErrorUnit };

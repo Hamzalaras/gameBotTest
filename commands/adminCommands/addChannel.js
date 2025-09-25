@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 const { ChannelManager } = require('../../centralUnits/channelsManager.js');
-const { ErrorUnit } = require('../../centralUnits/errorUnit.js');
+const { ErrorUnit, RandomErrors } = require('../../centralUnits/errorUnit.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,10 +19,8 @@ module.exports = {
             await interaction.deferReply({ ephemeral: true });
             const targetChannel = await interaction.options.getChannel('الروم');
             const guild = interaction.guild;
-            if(!guild){
-                await ErrorUnit.throwError(false, interaction, `هذا الأمر صالح في السيرفر فقط!!`);
-                return;
-            };
+            if(!guild) throw new RandomErrors('هذا الأمر صالح في السيرفر فقط!! 😘');
+
             const channelManager = new ChannelManager(interaction);
             await channelManager.addChannel(guild, targetChannel, 'Administrator');
             return ;

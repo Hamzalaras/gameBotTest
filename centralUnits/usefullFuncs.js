@@ -1,60 +1,71 @@
 const { ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder } = require('discord.js');
-const { ErrorUnit } = require('./errorUnit.js');
+const { RandomErrors } = require('./errorUnit.js');
 const path = require('path');
+const chests = require('../data/chest.json'); 
 const cardsJson = require('../data/cards/cards.json');
 const story = require('../data/story/firstPort/firstPort.json');
 const consequences = require('../data/story/firstPort/consequences.json');
 
-function random(array){
-    return array[Math.floor(Math.random() * array.length)];
-}
-
+//Reusbale items goes here
 const quiteBTN = [new ButtonBuilder()
                      .setCustomId('تعطيل')
                      .setLabel('تعطيل')
                      .setStyle(ButtonStyle.Secondary)];
 
+//Random item from a given array
+function random(array){
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+//Displaying story content
 async function gameHandling(Management, msg, confirmationMsg, filter, advanture = false){
 
     //if(!advanture) {}
-    let position = (await Management.selectManager(['story_position'], 'players', ['player_id'], [msg.author.id]))[0].story_position;
+    //Every var that will be used in catch goes here
+
+    let position = (await Management.selectManager(['story_position'], 'players', ['player_id'], [msg.author.id]))[0].story_position;    //Get the user position, Only from the main story !!CONSEQUENCE NOT ENCLUDED
     let buttons = [];
     let xp = 0;
     
     try {
 
-        let currentFrame = 0;
-        let wichSubHistory = false;
-        let pass = false; // switch over consequence and main story line !!IMPORTANT!!
+        let currentFrame = 0; //Frames of consequences
+        let wichSubHistory = false; //Hold the next sequence or frame
+        let pass = false; //Switch over consequence and main story firstPort !!IMPORTANT!!
 
+        //While loop with always true condition so the inly way to get out is by return, throw, break keyWords
         while(true){
 
+            //Get the data from the firstPort or consequences based on pass val && wishSubHistory val
             const data = pass && wichSubHistory ? 
                          consequences.find(c => c.id === wichSubHistory.consequence).frames[currentFrame] :
                          story.sequences.find(s => s.position === position) ;
-            if(!data){
-                await ErrorUnit.throwError(false, msg, 'لم يتم العثور على موقعكم الحالي في القصة!!\nحاول لاحقا ');
-                return;
-            }                
+            if(!data) throw new RandomErrors(`يتعذر العثور على موقعكم الحالي في القصة 🥲\nيرجى المحاولة لاحقا 😘`);         
             
+            //Get the photo path if exist
             const photo = data.photo ? 
                           [path.join(__dirname, '..', 'data', 'story', 'firstPort', 'images', data.photo)] :
                           [] ;
+
+            //Get the narrator s parole            
             const content = `${msg.author} \n` + data.racontreur.map(obj =>{
                                 const raconteur = Object.keys(obj)[0];
                                 return `${raconteur}: ${obj[raconteur]}`
                             }).join('\n');    
                             
+            //Get the buttons choices and add the quitte btn, limit is five buttons so be carefull                
             buttons = data.subHistory.map(obj => {
                 return  new ButtonBuilder()
-                        .setCustomId(`${obj.button}`)
+                        .setCustomId(`${obj.button}`) //Making custom id same as label to make it easy later for searching
                         .setLabel(`${obj.button}`)
                         .setStyle(obj.buttonStyle)
             }).concat(quiteBTN);
             const row = new ActionRowBuilder().addComponents(buttons);
 
+            //Sending the story and waiting for btn interaction
             await confirmationMsg.edit({content: `${content}`, files: photo, components: [row]});
             const collector = await confirmationMsg.awaitMessageComponent({ filter, time: 30_000 });
+
             if(collector.customId === 'تعطيل'){
                 await collector.deferUpdate();
                 const oldXp = (await Management.selectManager(['xp'], 'players', ['player_id'], [msg.author.id]))[0].xp;
@@ -62,26 +73,31 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
                 await confirmationMsg.edit({content: `${msg.author}\nتم حفظ تقدمك بنجاح 😘`});
                 return;
             }
+
+            //For each button clicked the user get + 10 xp, no matter the choice
             xp += 10;
             await collector.deferUpdate();
-            wichSubHistory =  data.subHistory.find(obj => obj.button === collector.customId);
-            if(!wichSubHistory){
-                await new ErrorUnit.throwError(false, msg, 'حدث خطأ أثناء البحث عن الصفحة التالية 🥲\n يرجى المحاولة لاحقا 😘');
-                return;
-            }
+            wichSubHistory =  data.subHistory.find(obj => obj.button === collector.customId); //Get the nest page infos
+            if(!wichSubHistory) throw new RandomErrors('حدث خطأ أثناء البحث عن الصفحة التالية 🥲\n يرجى المحاولة لاحقا 😘');
 
+            //-followUp- means if the sequence have a consequence
             if(!wichSubHistory.followUp){ 
                 position++;
-                con = false;
+                pass = false;
             }else if(wichSubHistory.followUp && wichSubHistory.consequence){
-                if(con) currentFrame++;
-                con = true;
+                //If pass was false that means were gonna start from the first frame cuz currentFrame is 0, on consequence by making it true;
+                if(pass) currentFrame++;
+                pass = true;
+            }else{
+                //If none of above work may leand us on unexpected Error when the loop start over again, probably cuz the json file miss something -me hhhhh
+                throw new RandomErrors('حدث خطأ أثناء البحث عن الصفحة التالية 🥲\nيرجى المحاولة لاحقا 😘')
             }
         }
         
     } catch (error) {
 
         if (error.code === 'InteractionCollectorError' || error.message.includes('time')){
+            //Updating the story position, xp and make the buttons disabled if the collector time is over
             try {
                 const oldXp = (await Management.selectManager(['xp'], 'players', ['player_id'], [msg.author.id]))[0].xp;
                 await Management.updateManager(['story_position', 'xp'], 'players', [position, `${Number(oldXp) + xp}`], ['player_id'], [msg.author.id]);
@@ -89,8 +105,7 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
                 await confirmationMsg.edit({content: `${msg.author}\nلقد إنتهى الوقت المحدد ❌\nلقد تم حفظ تقدمكم بنجاح 😘`});
                 return;
             } catch (error) {
-                await ErrorUnit.throwError(false, msg, 'حدث خطأ أثناء محاولة حفظ تقدمكم!!\nسيتم اصلاح الخطأ في أقرب وقت');
-                return;
+                throw error;
             }
         } else {
             throw error;
@@ -99,6 +114,7 @@ async function gameHandling(Management, msg, confirmationMsg, filter, advanture 
     }
 } 
 
+//Count how many an array items r repeated
 function count(arr){
     let final = {};
     for(val of arr){
@@ -107,6 +123,7 @@ function count(arr){
     return final;
 }
 
+//Count points from an attaque
 function pointsCollector(deck, typeOfDeck){
     try {
         let points  = 10;
@@ -130,46 +147,24 @@ function pointsCollector(deck, typeOfDeck){
     }
 }
 
-const info = {
-    'عام': {
-        cards: [{'عامة': 2}],
-        welth: [{'gold': 100}, {'daimands': 5}],
-        rate: 60
-    },
-    'نادر': {
-        cards: [{'عامة': 5}, {'نادرة': 2}],
-        welth: [{'gold': 200}, {'daimands': 10}],
-        rate: 25
-    },
-    'واعر': {
-        cards: [{'عامة': 8}, {'نادرة': 5}, {'أسطورية': 1}],
-        welth: [{'gold': 300}, {'daimands': 15}],
-        rate: 10
-    },
-    'هارب': {
-        cards: [{'عامة': 15}, {'نادرة': 10}, {'أسطورية': 4}],
-        welth: [{'gold': 700}, {'daimands': 40}, {'coins': 10}],
-        rate: 5
-    }
-}
-
+//Generate a chest based on a type param
 function chestGenerator(type = false){
     try {
         let [chest, chances] = [undefined, 0];
 
         const rand = Math.random() * 60;
         if(type){
-            chest = {type, ...info[type]};
+            chest = chests.find(obj => obj.type === type);
         }else{
-            for(const [type, data] of Object.entries(info)){
-                chances += data.rate;
+            for(const chestType of chests){
+                chances += chestType.rate;
                 if(rand < chances){
-                    chest = {type, ...data};
+                    chest = chestType;
                     break;
                 }
             }
         }
-        if(!chest) throw new Error('خطأ');
+        if(!chest) throw new RandomErrors('حدث خطأ أثناء توليد الصندوق!! 🥲\nيرجى المحاولة لاحقا 😘');
 
         const cards = chest.cards.map(type => {
             const [typeName, num, collected] = [Object.keys(type)[0], Object.values(type)[0], []];
@@ -188,6 +183,7 @@ function chestGenerator(type = false){
     }
 }
 
+//Calculate the lvl of the users
 function getLvl(xp){
     try {
         let theGorge = 100;
