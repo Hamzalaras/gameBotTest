@@ -9,11 +9,14 @@ module.exports ={
     need: true,
     async execute(msg){
 
+        //Embed and shit 
+        const avatar = msg.client.user.displayAvatarURL({ dynamic: true, size: 1024 });
         const faceEmbed = new EmbedBuilder()
+                              .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${avatar}`})
                               .setTitle('تفعيل_قصة')
                               .setColor('Red')
                               .addFields(
-                                { name: 'هام:', value: '\*\*يرجى قراءة شرح هذا الأمر عن طريق طباعة الأمر: \`مساعدة\` \`تفعيل_قصة\`\*\*'}
+                                { name: 'هام:', value: '\*\*يرجى قراءة شرح هذا الأمر عن طريق طباعة الأمر: \`مساعدة\` \`تفعيل_قصة\`\*\* 😘'}
                               );
         const buttons = [
                          new ButtonBuilder().setCustomId('confirmation').setLabel('تأكيد').setStyle(ButtonStyle.Danger),
@@ -27,6 +30,7 @@ module.exports ={
             const confirmationMsg = await msg.channel.send({content: `${msg.author}`, embeds: [faceEmbed], components: [buttonsRow]});
             const collector = await confirmationMsg.awaitMessageComponent({ filter , time: 60_000 });
             
+            //Call the game handling function - nothing special
             if(collector.customId === 'confirmation'){
                 await collector.deferUpdate();
                 await confirmationMsg.edit({embeds: []});
@@ -39,7 +43,7 @@ module.exports ={
                 return;
             }
         } catch (error) {
-            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر: \`تفعيل_قصة\`');
+            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر: \`تفعيل_قصة\` 😘');
             return;
         }
                               

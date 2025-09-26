@@ -5,8 +5,8 @@
             {
                 "name": "test1",
                 "photo": "first.jpg",
-                "nature": "spell",
-                "type": "attaque",
+                "nature": "تعويذة",
+                "type": "هجوم",
                 "power": 10,
                 "id": "1",
                 "usesLeft": 3
@@ -14,8 +14,8 @@
             {
                 "name": "test2",
                 "photo": "",
-                "nature": "troop",
-                "type": "attaque",
+                "nature": "محارب",
+                "type": "هجوم",
                 "power": 15,
                 "id": "2",
                 "usesLeft": 3
@@ -23,8 +23,8 @@
             {
                 "name": "test3",
                 "photo": "",
-                "nature": "skill",
-                "type": "attaque",
+                "nature": "مهارة",
+                "type": "هجوم",
                 "power": 6,
                 "id": "3",
                 "usesLeft": 3
@@ -32,8 +32,8 @@
             {
                 "name": "test4",
                 "photo": "",
-                "nature": "troop",
-                "type": "defence",
+                "nature": "محارب",
+                "type": "دفاع",
                 "power": 20,
                 "id": "4",
                 "usesLeft": 3
