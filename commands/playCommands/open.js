@@ -24,24 +24,29 @@ module.exports = {
             const [cards, welth] = [chest.cards, chest.welth];
 
             //Check if the user have the chest s cards to either insert it or update the uses left for each card
+            // and update the other tables
             const dispoCheck = [];
             for(const card of cards){
                 const row = await Management.selectManager(['card_id', 'uses_left'], 'players_cards', ['player_id', 'card_id'], [msg.author.id, card.id]);
                 dispoCheck.push(row);
             }
             for(let i = 0; i < dispoCheck.length; i++){
-                dispoCheck[i].length === 0 ?
+                if(dispoCheck[i].length === 0){
                     await Management.insertManager(
                         ['player_name', 'player_id', 'card_id', 'uses_left'],
                         'players_cards',
                         [msg.author.globalName, msg.author.id, cards[i].id, cards[i].usesLeft]
-                    ) :
+                    );
+                    const oldUsersNum = (await Management.selectManager(['owners_number'], 'cards', ['card_id'], [cards[i].id]))[0].owners_number;
+                    await Management.updateManager(['owners_number'], 'cards', [Number(oldUsersNum) + 1], ['card_id'], [cards[i].id]);
+                }else{
                     await Management.updateManager(
-                        ['uses_left'], 
-                        'players_cards', 
+                        ['uses_left'],
+                        'players_cards',
                         [Number(dispoCheck[i][0].uses_left) + cards[i].usesLeft],
                         ['player_id', 'card_id'], [msg.author.id, dispoCheck[i][0].card_id]
-                    ) ;    
+                    );
+                }
             }
 
             //Update the user welth
@@ -54,7 +59,7 @@ module.exports = {
                 );
             }
 
-            //Update the user s chests
+            //Update the user s chests mail
             const num = Number(getChestInfo[0].chest_num);
             num > 1 ? await Management.updateManager(['chest_num'], 'players_mail_chests', [`${num - 1}`], ['player_id', 'chest_type'], [msg.author.id, chestName]) :
                       await Management.deleteManager('players_mail_chests', ['player_id', 'chest_type'], [msg.author.id, chestName]);
