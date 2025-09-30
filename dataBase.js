@@ -35,7 +35,6 @@ class Management{
             const query = `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${valueClause.join(', ')})`;
             const [row] = await dataBase.query(query, [...values]);
             //Throw an Error if  0 row was affected
-            if(row.affectedRows === 0 ) throw DatabaseError('0 سطر تم إدخاله');
             return;
         } catch (error) {
             throw new DatabaseError(error.message);
@@ -49,7 +48,6 @@ class Management{
             const query = `DELETE FROM ${table} WHERE ${columnsClause}`;
             const [row] = await dataBase.query(query, value);
             //Throw an Error if  0 row was affected
-            if(row.affectedRows === 0 ) throw DatabaseError('0 سطر تم حذفه');
             return;
         } catch (error) {
             throw new DatabaseError(error.message);
@@ -64,7 +62,6 @@ class Management{
             const query = `UPDATE ${table} SET ${columnsClause} WHERE ${whereClause}`;
             const [row] = await dataBase.query(query, [...values, ...whereVal]);
             //Throw an Error if  0 row was affected
-            if(row.affectedRows === 0 ) throw DatabaseError('0 سطر تم تحديثه');
             return;
         } catch (error) {
             throw new DatabaseError(error.message);
