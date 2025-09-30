@@ -199,4 +199,18 @@ function getLvl(xp){
     }
 }
 
-module.exports = { random, gameHandling, count, pointsCollector, chestGenerator, getLvl };
+async function deleteNiggas(Management, user){
+    try {
+            await Management.deleteManager('players', ['player_id'], [user.id]);
+            await Management.deleteManager('players_cards', ['player_id'], [user.id]);
+            await Management.deleteManager('players_characters', ['player_id'], [user.id]);
+            await Management.deleteManager('players_mail_chests', ['player_id'], [user.id]);
+            await Management.deleteManager('players_team_هجوم', ['player_id'], [user.id]);
+            await Management.deleteManager('players_team_دفاع', ['player_id'], [user.id]);
+            await Management.deleteManager('players_welth', ['player_id'], [user.id]);
+    } catch (error) {
+        throw error; 
+    }
+}
+
+module.exports = { random, gameHandling, count, pointsCollector, chestGenerator, getLvl, deleteNiggas };
