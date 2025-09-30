@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 const { Management } = require('../dataBase.js');
-const { ErrorUnit } = require('../centralUnits/errorUnit.js');
+const { ErrorUnit, RandomErrors } = require('../centralUnits/errorUnit.js');
 
 module.exports = {
     on: true, 
@@ -10,6 +10,10 @@ module.exports = {
             if(msg.author.bot) return;
             const getIds = await Management.selectManager(['channel_id'], 'servers', ['server_id'], [msg.guild.id]);
             if(getIds.length > 0 && !getIds.some(item => item.channels_ids === msg.channel.id)) return;
+
+            //Check if the nigga is baned befor 
+            const banedBefor = (await Management.selectManager(['player_id'], 'players_baned', ['player_id'], [msg.author.id])).length !== 0;
+            if(banedBefor) throw new RandomErrors('أنت محظور من التسجيل في بوت الرحمة الكونية!! 🥲\nيرجى طلب الإعتراض في سيرفر البوت 😘'); 
 
             const commandsNames = [...msg.client.commands.keys()];
             const args = await msg.content.trim().split(/\s+/);            
