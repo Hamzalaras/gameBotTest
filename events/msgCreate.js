@@ -9,7 +9,7 @@ module.exports = {
         try {
             if(msg.author.bot) return;
             const getIds = await Management.selectManager(['channel_id'], 'servers', ['server_id'], [msg.guild.id]);
-            if(getIds.length > 0 && !getIds.some(item => item.channels_ids === msg.channel.id)) return;
+            if(getIds.length > 0 && !getIds.some(item => item.channel_id === msg.channel.id)) return;
 
             //Check if the nigga is baned befor 
             const banedBefor = (await Management.selectManager(['player_id'], 'players_baned', ['player_id'], [msg.author.id])).length !== 0;
