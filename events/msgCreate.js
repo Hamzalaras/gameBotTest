@@ -21,10 +21,7 @@ module.exports = {
                                                .find(command => command.name && command.name.includes(args[0]));
             if(!targetCommand) return;
             const exist = (await Management.selectManager(['player_id'], 'players', ['player_id'], [msg.author.id])).length > 0 ;
-            if(!(exist === targetCommand.need) && targetCommand.need !== undefined ){
-                await ErrorUnit.throwError(false, msg, `لا يمكنك تنفيذ هذا الأمر: \`${args[0]}\`` );
-                return;
-            }
+            if(!(exist === targetCommand.need) && targetCommand.need !== undefined ) throw new RandomErrors(`لا يمكنك تنفيذ هذا الأمر: \`${args[0]}\` 🥲`);
 
             await targetCommand.execute(msg, args);
             return;

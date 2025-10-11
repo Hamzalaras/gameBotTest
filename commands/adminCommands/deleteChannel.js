@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 const { ChannelManager } = require('../../centralUnits/channelsManager.js');
-const { ErrorUnit } = require('../../centralUnits/errorUnit.js');
+const { ErrorUnit, RandomErrors } = require('../../centralUnits/errorUnit.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
