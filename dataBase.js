@@ -34,7 +34,6 @@ class Management{
             const valueClause = values.map(val => `?`);
             const query = `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${valueClause.join(', ')})`;
             const [row] = await dataBase.query(query, [...values]);
-            //Throw an Error if  0 row was affected
             return;
         } catch (error) {
             throw new DatabaseError(error.message);
@@ -47,7 +46,6 @@ class Management{
             const columnsClause = columns.map(col => `${col}= ?`).join(' AND ');
             const query = `DELETE FROM ${table} WHERE ${columnsClause}`;
             const [row] = await dataBase.query(query, value);
-            //Throw an Error if  0 row was affected
             return;
         } catch (error) {
             throw new DatabaseError(error.message);
@@ -61,7 +59,6 @@ class Management{
             const whereClause = where.map(w => `${w} = ?`).join(' AND ');
             const query = `UPDATE ${table} SET ${columnsClause} WHERE ${whereClause}`;
             const [row] = await dataBase.query(query, [...values, ...whereVal]);
-            //Throw an Error if  0 row was affected
             return;
         } catch (error) {
             throw new DatabaseError(error.message);

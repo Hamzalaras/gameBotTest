@@ -19,7 +19,7 @@ module.exports = {
             const avatar = msg.client.user.displayAvatarURL({ dynamic: true, size: 1024 });
             const cardEmbed = new EmbedBuilder()
                                 .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${avatar}`})
-                                .setTitle(`🕹️بطاقات اللاعب : ${msg.author.globaleName}`)
+                                .setTitle(`🕹️بطاقات اللاعب : ${msg.author.globalName}`)
                                 .setColor('Green')
                                 .addFields(
                                     cards.map(type =>{

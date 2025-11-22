@@ -3,40 +3,364 @@
         "value": "عامة",
         "cards": [
             {
-                "name": "test1",
+                "name": "إنتحار",
+                "photo": "first.jpg",
+                "nature": "مهارة",
+                "type": "دفاع",
+                "power": "24",
+                "id": "1",
+                "canUse": true,
+                "usesLeft": "14"
+            },
+            {
+                "name": "صور-الحلوين",
                 "photo": "first.jpg",
                 "nature": "تعويذة",
                 "type": "هجوم",
-                "power": 10,
-                "id": "1",
-                "usesLeft": 3
+                "power": "10",
+                "id": "2",
+                "canUse": true,
+                "usesLeft": "20"
             },
             {
-                "name": "test2",
+                "name": "صور-هاربة",
+                "photo": "first.jpg",
+                "nature": "مهارة",
+                "type": "هجوم",
+                "power": "15",
+                "id": "3",
+                "canUse": true,
+                "usesLeft": "20"
+            },
+            {
+                "name": "تجليخ",
+                "photo": "first.jpg",
+                "nature": "مهارة",
+                "type": "هجوم",
+                "power": "29",
+                "id": "4",
+                "canUse": true,
+                "usesLeft": "17"
+            },
+            {
+                "name": "رجلين",
+                "photo": "first.jpg",
+                "nature": "تعويذة",
+                "type": "هجوم",
+                "power": "30",
+                "id": "5",
+                "canUse": true,
+                "usesLeft": "12"
+            },
+            {
+                "name": "أقوال-goon",
+                "photo": "",
+                "nature": "تعويذة",
+                "type": "دفاع",
+                "power": "12",
+                "id": "6",
+                "canUse": true,
+                "usesLeft": "10"
+            },
+            {
+                "name": "راس-العود",
                 "photo": "",
                 "nature": "محارب",
                 "type": "هجوم",
-                "power": 15,
-                "id": "2",
-                "usesLeft": 3
+                "power": "26",
+                "id": "7",
+                "canUse": false,
+                "usesLeft": "13"
             },
             {
-                "name": "test3",
+                "name": "يادرا",
                 "photo": "",
-                "nature": "مهارة",
-                "type": "هجوم",
-                "power": 6,
-                "id": "3",
-                "usesLeft": 3
+                "nature": "تعويذة",
+                "type": "دفاع",
+                "power": "17",
+                "id": "8",
+                "canUse": false,
+                "usesLeft": "16"
             },
             {
-                "name": "test4",
+                "name": "w9",
                 "photo": "",
                 "nature": "محارب",
                 "type": "دفاع",
-                "power": 20,
-                "id": "4",
-                "usesLeft": 3
+                "power": "0",
+                "id": "9",
+                "canUse": false,
+                "usesLeft": "18"
+            },
+            {
+                "name": "زروطة",
+                "photo": "",
+                "nature": "محارب",
+                "type": "دفاع",
+                "power": "22",
+                "id": "10",
+                "canUse": true,
+                "usesLeft": "10"
+            },
+            {
+                "name": "واد-الحراش",
+                "photo": "",
+                "nature": "تعويذة",
+                "type": "هجوم",
+                "power": "25",
+                "id": "11",
+                "canUse": false,
+                "usesLeft": "14"
+            },
+            {
+                "name": "67",
+                "photo": "",
+                "nature": "مهارة",
+                "type": "دفاع",
+                "power": "19",
+                "id": "12",
+                "canUse": false,
+                "usesLeft": "10"
+            },
+            {
+                "name": "vamos",
+                "photo": "",
+                "nature": "مهارة",
+                "type": "دفاع",
+                "power": "24",
+                "id": "13",
+                "canUse": false,
+                "usesLeft": "12"
+            }
+        ]
+    },
+    {
+        "value": "نادرة",
+        "cards": [
+            {
+                "name": "شب-طيزي",
+                "photo": "",
+                "nature": "محارب",
+                "type": "هجوم",
+                "power": "40",
+                "id": "14",
+                "canUse": false,
+                "usesLeft": "7"
+            },
+            {
+                "name": "غرب-شمس",
+                "photo": "",
+                "nature": "تعويذة",
+                "type": "هجوم",
+                "power": "50",
+                "id": "15",
+                "canUse": false,
+                "usesLeft": "7"
+            },
+            {
+                "name": "طنة-ملحمية",
+                "photo": "",
+                "nature": "مهارة",
+                "type": "دفاع",
+                "power": "53",
+                "id": "16",
+                "canUse": true,
+                "usesLeft": "6"
+            },
+            {
+                "name": "سرقة",
+                "photo": "",
+                "nature": "مهارة",
+                "type": "هجوم",
+                "power": "37",
+                "id": "17",
+                "canUse": true,
+                "usesLeft": "3"
+            },
+            {
+                "name": "تقليد",
+                "photo": "",
+                "nature": "مهارة",
+                "type": "دفاع",
+                "power": "37",
+                "id": "18",
+                "canUse": true,
+                "usesLeft": "5"
+            },
+            {
+                "name": "حماية",
+                "photo": "",
+                "nature": "تعويذة",
+                "type": "دفاع",
+                "power": "60",
+                "id": "19",
+                "canUse": true,
+                "usesLeft": "4"
+            },
+            {
+                "name": "زك-الليل",
+                "photo": "",
+                "nature": "محارب",
+                "type": "هجوم",
+                "power": "56",
+                "id": "20",
+                "canUse": false,
+                "usesLeft": "8"
+            },
+            {
+                "name": "ترمة-يحياوي",
+                "photo": "",
+                "nature": "محارب",
+                "type": "دفاع",
+                "power": "46",
+                "id": "21",
+                "canUse": true,
+                "usesLeft": "10"
+            },
+            {
+                "name": "صندوق",
+                "photo": "",
+                "nature": "تعويذة",
+                "type": "دفاع",
+                "power": "33",
+                "id": "22",
+                "canUse": true,
+                "usesLeft": "5"
+            },
+            {
+                "name": "بارد-الكتاف",
+                "photo": "",
+                "nature": "محارب",
+                "type": "دفاع",
+                "power": "35",
+                "id": "23",
+                "canUse": false,
+                "usesLeft": "10"
+            },
+            {
+                "name": "لحاس-الرجلين",
+                "photo": "",
+                "nature": "محارب",
+                "type": "هجوم",
+                "power": "58",
+                "id": "24",
+                "canUse": false,
+                "usesLeft": "8"
+            },
+            {
+                "name": "الصكر",
+                "photo": "",
+                "nature": "محارب",
+                "type": "هجوم",
+                "power": "51",
+                "id": "25",
+                "canUse": false,
+                "usesLeft": "8"
+            },
+            {
+                "name": "إمامو-علي",
+                "photo": "",
+                "nature": "محارب",
+                "type": "هجوم",
+                "power": "59",
+                "id": "26",
+                "canUse": true,
+                "usesLeft": "9"
+            },
+            {
+                "name": "زنجريتا",
+                "photo": "",
+                "nature": "محارب",
+                "type": "دفاع",
+                "power": "49",
+                "id": "27",
+                "canUse": true,
+                "usesLeft": "8"
+            },
+            {
+                "name": "بوفله",
+                "photo": "",
+                "nature": "محارب",
+                "type": "دفاع",
+                "power": "51",
+                "id": "28",
+                "canUse": true,
+                "usesLeft": "7"
+            },
+            {
+                "name": "فهد-سال",
+                "photo": "",
+                "nature": "محارب",
+                "type": "هجوم",
+                "power": "57",
+                "id": "29",
+                "canUse": true,
+                "usesLeft": "6"
+            }
+        ]
+    },
+    {
+        "value": "أسطورية",
+        "cards": [
+            {
+                "name": "زبزوب الأرض",
+                "photo": "",
+                "nature": "محارب",
+                "type": "هجوم",
+                "power": "90",
+                "id": "30",
+                "canUse": true,
+                "usesLeft": "1"
+            },
+            {
+                "name": "كنجوة-غضيب",
+                "photo": "",
+                "nature": "محارب",
+                "type": "دفاع",
+                "power": "86",
+                "id": "31",
+                "canUse": false,
+                "usesLeft": "2"
+            },
+            {
+                "name": "لحاس-الطبابن",
+                "photo": "",
+                "nature": "محارب",
+                "type": "هجوم",
+                "power": "80",
+                "id": "32",
+                "canUse": false,
+                "usesLeft": "3"
+            },
+            {
+                "name": "قلاوي-الجبل",
+                "photo": "",
+                "nature": "محارب",
+                "type": "دفاع",
+                "power": "81",
+                "id": "33",
+                "canUse": false,
+                "usesLeft": "3"
+            },
+            {
+                "name": "فتاة-قوطية",
+                "photo": "",
+                "nature": "تعويذة",
+                "type": "دفاع",
+                "power": "66",
+                "id": "34",
+                "canUse": true,
+                "usesLeft": "2"
+            },
+            {
+                "name": "adios",
+                "photo": "",
+                "nature": "مهارة",
+                "type": "هجوم",
+                "power": "76",
+                "id": "35",
+                "canUse": false,
+                "usesLeft": "3"
             }
         ]
     }

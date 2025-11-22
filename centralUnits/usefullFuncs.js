@@ -213,4 +213,17 @@ async function deleteNiggas(Management, user){
     }
 }
 
-module.exports = { random, gameHandling, count, pointsCollector, chestGenerator, getLvl, deleteNiggas };
+
+function traduction(arabicWord) {
+    try {
+        const traductionDic = {
+            'دفاع': 'defence',
+            'هجوم': 'attack'
+        }
+        return traductionDic[arabicWord];
+    } catch (error) {
+        throw error; 
+    }
+}
+
+module.exports = { random, gameHandling, count, pointsCollector, chestGenerator, getLvl, deleteNiggas, traduction };

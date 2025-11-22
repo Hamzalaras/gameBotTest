@@ -1,0 +1,111 @@
+[
+    {
+        "arabicName": "🎮أوامر اللعب🎮",
+        "category": "player",
+        "commands":[
+            {
+                "for": "لغير اللاعب فقط:",
+                "data": [
+                    {
+                        "commandName": "رحمة",
+                        "help": "later"
+                    }
+                ]
+            },
+            {
+                "for": "اللاعب فقط:",
+                "data": [
+                    {
+                        "commandName": "بطاقاتي",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "عرض",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "تفعيل_قصة",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "ملفي",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "تشكيلة",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "تغيير",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "هاجم",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "بريدي",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "فتح_صندوق",
+                        "help": "later"
+                    }
+                ]
+            },
+            {
+                "for": "كل من اللاعب وغير اللاعب:",
+                "data":[
+                    {
+                        "commandName": "أوامر",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "مساعدة",
+                        "help": "later"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "arabicName" : "أوامر الأدمن",
+        "category": "admin",
+        "commands":[
+            {
+                "for": "أدمن فقط",
+                "data": [
+                    {
+                        "commandName": "تحديد_روم",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "حذف_روم",
+                        "help": "later"
+                    }
+
+                ]
+            }
+        ]
+    },
+    {
+        "arabicName" : "أوامر صناع البوت",
+        "category": "owner",
+        "commands":[
+            {
+                "for": "أدمن فقط",
+                "data": [
+                    {
+                        "commandName": "تحديد_روم",
+                        "help": "later"
+                    },
+                    {
+                        "commandName": "حذف_روم",
+                        "help": "later"
+                    }
+
+                ]
+            }
+        ]
+    }
+]

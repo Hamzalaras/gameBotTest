@@ -1,5 +1,5 @@
 const cardsJSON = require('../../data/cards/cards.json');
-const { ErrorUnit, RandomErrors } = require('../../centralUnits/errorUnit.js');
+const { ErrorUnit, RandomErrors, FalseInput } = require('../../centralUnits/errorUnit.js');
 const path = require('path');
 const { EmbedBuilder } = require('discord.js');
 
@@ -11,7 +11,7 @@ module.exports = {
         try {
             //Get the keyWord
             const wanted = msg.content.trim().split(/\s+/)[1];
-            
+            if(!wanted) throw new FalseInput('عرض');
             //I ve used a for of loop to get the card, but u can use -flatMap()- and -find()- for a short syntax
             // but that will consume more memory
             let [targetCard, Cardtype] = [undefined, undefined];
