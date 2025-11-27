@@ -9,34 +9,43 @@ module.exports = {
             .setName('deploy_cards')
             .setDescription('رفع البطاقات على قاعدة البيانات فقط دون تجديد الملف!!'),
     on: true,
-    path: { 'adminCommands': [0, 0] },   
+    category: 'owner',
     async execute(interaction){
         try {
             await interaction.deferReply({ ephemeral: true });
             //Check if is one of the owners
             const owners = [process.env.HAMZA];
-            if(!(owners.some(id => id == interaction.user.id))) throw new RandomErrors('أنت لست ضمن صناع البوت!!\nهذا الأمر خاص بصناع البوت فقط 😘');
+            if ( !( owners.includes(interaction.user.id) ) ) {
+                throw new RandomErrors('أنت لست ضمن صناع البوت!!\nهذا الأمر خاص بصناع البوت فقط 😘');
+            }
 
             //Get the cards that r not in the data base
-            const cards = cardsJson.flatMap(t => t.cards);
-            const dispoCardIds = (await Management.selectManager(['card_id'] , 'cards', [1], [1])).map(o => Object.values(o)[0]);
-            for(const id of dispoCardIds){
-                const index = Number(id) - 1;
-                if(cards[index]) delete cards[index]; //Use this shit just cuz i v used -flatMat()- + index search in many places 
-            }
-            const noDispo = cards.filter (i => i !== undefined ); 
+            const cards = cardsJson.flatMap(value => value.cards);
+            const dbCards = await Management.selectManager(
+                                        ['card_id'] ,
+                                        'cards', 
+                                        [1],
+                                        [1]
+                                    );
+
+            const dbCardIds = new Set( dbCards.map(obj => obj.card_id) );
+            const cardsToUpload = cards.filter( card => !(dbCardIds.has(card.id)) ); 
 
             //Set the no dispo cards
-            let number = 0; //Number of inserted cards
-            for(const card of noDispo){
-                await Management.insertManager(['card_name', 'card_id'], 'cards', [card.name, card.id]);
-                number+= 1;
-            }
+            const promises = cardsToUpload.map(card => 
+                Management.insertManager(['card_name', 'card_id'], 'cards', [card.name, card.id])
+            );
 
-            await interaction.editReply(`تم تسجيل \*\*${number}\*\* بطاقات في قاعدة البيانات بنجاح!! 😘`);
+            //Wait for all insertions to complete
+            await Promise.all(promises); 
+
+            const insertedNbr = cardsToUpload.length; 
+
+            await interaction.editReply(`تم تسجيل \*\*${insertedNbr}\*\* بطاقات في قاعدة البيانات بنجاح!! 😘`);
+
             return;
         } catch (error) {
-            await ErrorUnit.throwError(error, msg, 'حدث خطأ أثناء تنفيذ الأمر \`deploy_cards\` 🥲');
+            await ErrorUnit.throwError(error, interaction, 'حدث خطأ أثناء تنفيذ الأمر \`deploy_cards\` 🥲');
             return;
         }
     }

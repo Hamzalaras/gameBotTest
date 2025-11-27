@@ -30,14 +30,14 @@ module.exports ={
                             }
                         );
 
-            const botAvatar = msg.client.user.displayAvatarURL({ dynamic: true, size: 1024 });
+            const botAvatar = msg.client.user.displayAvatarURL({ dynamic: true, size: 1024, });
             const mainEmbed = new EmbedBuilder()
-                                  .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${botAvatar}`})
+                                  .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${botAvatar}`, })
                                   .setColor('Green')
-                                  .setTitle(`🕹️بريد اللاعب ${msg.author}`)
+                                  .setTitle(`🕹️بريد اللاعب ${msg.author.globalName}`)
                                   .addFields(fields);
 
-            await msg.channel.send({content: `${msg.author}`, embeds: [mainEmbed]});
+            await msg.channel.send({ content: `${msg.author}`, embeds: [mainEmbed], });
 
             return;                      
         } catch (error) {

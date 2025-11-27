@@ -21,7 +21,7 @@ module.exports = {
             //Embeds and shit
             const botAvatar = msg.client.user.displayAvatarURL({ dynamic: true, size: 1024 });
             const mainEmbed = new EmbedBuilder()
-                                    .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${botAvatar}`})
+                                    .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${botAvatar}`, })
                                     .setTitle('🕹️تغيير تشكيلة اللاعب')
                                     .setDescription('🃏الرجاء إختيار تشكيلة لتغييرها')
                                     .setColor('Red');
@@ -29,7 +29,7 @@ module.exports = {
             const deckTypeBtns = 
                 [
                     new ButtonBuilder().setCustomId('هجوم').setLabel('هجوم').setStyle(ButtonStyle.Primary),
-                    new ButtonBuilder().setCustomId('دفاع').setLabel('دفاع').setStyle(ButtonStyle.Primary)
+                    new ButtonBuilder().setCustomId('دفاع').setLabel('دفاع').setStyle(ButtonStyle.Primary),
                 ];
             const btnsRow = new ActionRowBuilder().addComponents(deckTypeBtns);
             
@@ -41,13 +41,13 @@ module.exports = {
                                 components: [btnsRow],
                             }
                         );
-            const getChosenType = await mainMsgObj.awaitMessageComponent({ filter, time: 3_000 });
+            const getChosenType = await mainMsgObj.awaitMessageComponent({ filter, time: 3_000, });
 
             //Managing the collector whatever was the customId
             if(getChosenType.customId){
                 //Making the buttons disabled to prevent errors
                 deckTypeBtns.forEach( btn => btn.setDisabled(true) );
-                await mainMsgObj.edit({ components: [btnsRow] });
+                await mainMsgObj.edit({ components: [btnsRow], });
 
                 //Modal and shit 
                 const arabicTypeName = getChosenType.customId;
@@ -75,7 +75,7 @@ module.exports = {
 
                 modal.addComponents( modalFields.map( f => new ActionRowBuilder().addComponents(f) ) );
                 await getChosenType.showModal(modal);
-                const getModalInfo = await getChosenType.awaitModalSubmit({ filter, time: 120_000 });
+                const getModalInfo = await getChosenType.awaitModalSubmit({ filter, time: 120_000, });
                 await getModalInfo.deferUpdate();
 
                 //Handling the modal and values
@@ -85,7 +85,7 @@ module.exports = {
                         [ 
                             submitted.fields.getTextInputValue('firstCard'),
                             submitted.fields.getTextInputValue('secondCard'),
-                            submitted.fields.getTextInputValue('thirdCard')
+                            submitted.fields.getTextInputValue('thirdCard'),
                         ];
                     if (firstValue === secondValue || secondValue === thirdValue || firstValue === thirdValue) {
                         throw new RandomErrors('يرجى إدخال قيم مختلفة عن بعضها البعض في كل خانة 😘');
@@ -109,7 +109,7 @@ module.exports = {
                         [
                             ( await Management.selectManager(['card_id'], 'players_cards', ['player_id', 'card_id'], [msg.author.id, firstCard.id]) )[0],
                             ( await Management.selectManager(['card_id'], 'players_cards', ['player_id', 'card_id'], [msg.author.id, secondCard.id]) )[0],
-                            ( await Management.selectManager(['card_id'], 'players_cards', ['player_id', 'card_id'], [msg.author.id, thirdCard.id]) )[0]
+                            ( await Management.selectManager(['card_id'], 'players_cards', ['player_id', 'card_id'], [msg.author.id, thirdCard.id]) )[0],
                         ];
                     for (let i = 0; i < hasCards.length; i++) {
                         if (!hasCards[i]) {
@@ -146,7 +146,7 @@ module.exports = {
                         {
                             content: `${msg.author}`,
                             embeds: [mainEmbed],
-                            components: []
+                            components: [],
                         }
                     );
                 }
@@ -158,8 +158,9 @@ module.exports = {
                 try {
                     await mainMsgObj.edit(
                         {
-                            content: `${msg.author}\nلقد إنتهى الوقت المحدد لهذه العملية ❌\nيرجى المحاولة مرة أخرى 😘`,
-                            components: []
+                            content: `${msg.author}\nلقد إنتهى الوقت المحدد لهذه العملية ❌\n\
+                                    يرجى المحاولة مرة أخرى 😘`,
+                            components: [],
                         }
                     );
                     return;

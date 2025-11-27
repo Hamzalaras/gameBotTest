@@ -40,17 +40,17 @@ module.exports = {
             }
 
             //Embed and shit 
-            const botAvatar = msg.client.user.displayAvatarURL({ dynamic: true, size: 1024 });
+            const botAvatar = msg.client.user.displayAvatarURL({ dynamic: true, size: 1024, });
             const mainEmbed = new EmbedBuilder()
                                 .setTitle(`شرح الأمر: \*\*${commandName}\*\*`)
-                                .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${botAvatar}`})
+                                .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${botAvatar}`, })
                                 .setColor('Green')
                                 .addFields(
-                                    { name: 'الشرح:', value: `\*\*${description}\*\*\n`},
-                                    { name: 'أسماء أخرى لنفس الأمر:', value: `\`${alias.join('\` \`')}\``}
+                                    { name: 'الشرح:', value: `\*\*${description}\*\*\n`, },
+                                    { name: 'أسماء أخرى لنفس الأمر:', value: `\`${alias.join('\` \`')}\``, }
                                 );
 
-            await msg.channel.send({content: `${msg.author}`, embeds: [mainEmbed]});
+            await msg.channel.send({ content: `${msg.author}`, embeds: [mainEmbed], });
 
             return;
         } catch (error) {

@@ -363,5 +363,35 @@
                 "usesLeft": "3"
             }
         ]
+    },
+    {
+        "value": "بطاقات الشخصيات",
+        "cards": [
+            {
+                "name": "حلاقة شهوانية",
+                "photo": "first.jpg",
+                "nature": "مهارة",
+                "type": "هجوم",
+                "id": "c_1_1",
+                "canUse": true,
+                "stages" : [
+                    {
+                        "stage": "1",
+                        "requireShahwaLevel": "1",
+                        "power": "30"
+                    },
+                    {
+                        "stage": "2",
+                        "requireShahwaLevel": "7",
+                        "power": "60"
+                    },
+                    {
+                        "stage": "3",
+                        "requireShahwaLevel": "20",
+                        "power": "90"
+                    }
+                ]
+            }
+        ]
     }
 ]

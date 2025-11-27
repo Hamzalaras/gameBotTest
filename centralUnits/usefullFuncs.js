@@ -1,7 +1,7 @@
 const { ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder } = require('discord.js');
 const { RandomErrors } = require('./errorUnit.js');
 const path = require('path');
-const chests = require('../data/chest.json'); 
+const chestsJson= require('../data/chest.json'); 
 const cardsJson = require('../data/cards/cards.json');
 const story = require('../data/story/firstPort/firstPort.json');
 const consequences = require('../data/story/firstPort/consequences.json');
@@ -148,36 +148,47 @@ function pointsCollector(deck, typeOfDeck){
 }
 
 //Generate a chest based on a type param
-function chestGenerator(type = false){
+function chestGenerator(type = null){
     try {
-        let [chest, chances] = [undefined, 0];
+        let generatedChest = null;
+        let rates = 0;
 
-        const rand = Math.random() * 60;
-        if(type){
-            chest = chests.find(obj => obj.type === type);
-        }else{
-            for(const chestType of chests){
-                chances += chestType.rate;
-                if(rand < chances){
-                    chest = chestType;
+        const rand = Math.random() * 100;
+        if (type) {
+            generatedChest = structuredClone(chestsJson.find(obj => obj.type === type));
+        } else {
+
+            for (const chest of chestsJson){
+                rates += +(chest.rate);
+
+                if (rand <= rates) {
+                    generatedChest = structuredClone(chest);
                     break;
                 }
             }
+
         }
-        if(!chest) throw new RandomErrors('حدث خطأ أثناء توليد الصندوق!! 🥲\nيرجى المحاولة لاحقا 😘');
 
-        const cards = chest.cards.map(type => {
-            const [typeName, num, collected] = [Object.keys(type)[0], Object.values(type)[0], []];
+        if (!generatedChest) {
+            throw new RandomErrors('حدث خطأ أثناء توليد الصندوق!! 🥲\nيرجى المحاولة لاحقا 😘');
+        }
 
-            for(let i = 0; i < num; i++){
-                const card = random(cardsJson.find(v => v.value === typeName).cards);
-                collected.some(c => c.id === card.id) ? i-- : collected.push(card);
-            };
-            return collected;
-        }).flat();
-        chest.cards = cards;
+        const cards = [];
+        for ( const [cardType, amount] of Object.entries(generatedChest.cards) ) {
 
-        return chest;
+            const collected = new Set();
+            const cardsPool = cardsJson.find(type => type.value === cardType).cards;
+
+            while (collected.size < amount) {
+                const card = random(cardsPool);
+                collected.add(card);
+            }
+            cards.push(...collected.values());
+        }
+        
+        generatedChest.cards = cards;
+
+        return generatedChest;
     } catch (error) {
         throw error;
     }
@@ -186,10 +197,10 @@ function chestGenerator(type = false){
 //Calculate the lvl of the users
 function getLvl(xp){
     try {
-        let theGorge = 100;
+        let lvlXp = 100;
         let lvl = 0;
-        while(xp > theGorge){
-            xp = xp - theGorge;
+        while(xp >= lvlXp){
+            xp -= lvlXp;
             lvl++;
             theGorge += 100;
         }
@@ -218,7 +229,9 @@ function traduction(arabicWord) {
     try {
         const traductionDic = {
             'دفاع': 'defence',
-            'هجوم': 'attack'
+            'هجوم': 'attack',
+            'gold': 'ذهب',
+            'daimands': 'ألماس'
         }
         return traductionDic[arabicWord];
     } catch (error) {

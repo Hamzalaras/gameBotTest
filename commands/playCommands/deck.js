@@ -43,7 +43,7 @@ module.exports = {
             const contentEmbed = new EmbedBuilder()
                                      .setTitle(`🕹️تشكيلة اللاعب: ${msg.author.globalName}`)
                                      .setColor('Red')
-                                     .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${avatar}`})
+                                     .setAuthor({ name: `${msg.client.user.username}`, iconURL: `${avatar}`, })
                                      .setDescription(`🃏\*\*تشكيلة ال${args[1]}\*\*🃏`)
                                      .addFields(
                                         { name: `♠️البطاقة الأولى:`,
@@ -54,10 +54,10 @@ module.exports = {
                                         },
                                         { name: `♣️البطاقة الثالثة:`,
                                             value: `-- \`\`${thirdCard.name}\`\`.\n-- معرفها: \*\*${thirdCard.id}\*\* .`
-                                        }
+                                        },
                                      );
              
-            await msg.channel.send({content: `${msg.author}`, embeds: [contentEmbed]}); 
+            await msg.channel.send({ content: `${msg.author}`, embeds: [contentEmbed], }); 
 
             return;
         } catch (error) {
